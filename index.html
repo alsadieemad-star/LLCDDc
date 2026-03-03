@@ -2,11 +2,10 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>منصة السعدي المتكاملة - النسخة الأكاديمية الشاملة</title>
+    <title>منصة السعدي الاحترافية - نسخة الذكاء الاصطناعي الشاملة</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     <style>
-        :root { --primary: #1a2a6c; --secondary: #b21f1f; --accent: #27ae60; --bg: #f4f7f6; --code-bg: #282c34; }
+        :root { --primary: #1a2a6c; --secondary: #b21f1f; --ai-color: #8e44ad; --bg: #f4f7f6; --code-bg: #282c34; }
         body { font-family: 'Segoe UI', Tahoma, sans-serif; background: var(--bg); margin: 0; padding-bottom: 80px; }
         header { background: linear-gradient(135deg, var(--primary), #2a4858); color: white; padding: 20px; text-align: center; }
         .nav-tabs { display: flex; background: #fff; border-bottom: 3px solid var(--secondary); position: sticky; top: 0; z-index: 1000; overflow-x: auto; }
@@ -16,6 +15,7 @@
         .page { display: none; }
         .page.active { display: block; }
         .card { background: white; border-radius: 12px; box-shadow: 0 5px 25px rgba(0,0,0,0.1); padding: 25px; margin-bottom: 25px; border-top: 5px solid var(--primary); }
+        .ai-card { border-top: 5px solid var(--ai-color); }
         .section-title { color: var(--secondary); border-bottom: 2px solid #eee; margin: 15px 0; padding-bottom: 5px; font-weight: bold; }
         .grid-form { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 15px; }
         .input-group { display: flex; flex-direction: column; background: #fafafa; padding: 10px; border-radius: 8px; border: 1px solid #eee; }
@@ -23,19 +23,20 @@
         input, select, textarea { padding: 10px; border: 1px solid #ccc; border-radius: 6px; font-size: 0.95rem; width: 100%; box-sizing: border-box; }
         .preview-area { display: grid; grid-template-columns: repeat(auto-fit, minmax(450px, 1fr)); gap: 20px; margin-top: 25px; }
         .classic-card { width: 100%; min-height: 400px; border: 1px solid #333; padding: 30px; font-family: 'Times New Roman', serif; position: relative; line-height: 1.6; background: #fff; font-size: 1.15rem; }
-        .card-class { position: absolute; top: 30px; right: 30px; font-weight: bold; text-align: left; line-height: 1.2; }
+        .card-class { position: absolute; top: 30px; right: 30px; font-weight: bold; text-align: left; }
         .card-body { margin-right: 120px; text-align: justify; }
         .marc-view { background: var(--code-bg); color: #9cdcfe; padding: 15px; border-radius: 10px; direction: ltr; text-align: left; font-family: monospace; white-space: pre-wrap; font-size: 0.9rem; }
         .tag { color: #e06c75; font-weight: bold; }
         .sub { color: #d19a66; }
         .btn { padding: 12px; border: none; border-radius: 8px; color: white; font-weight: bold; cursor: pointer; transition: 0.3s; }
+        .ai-btn { background: var(--ai-color); width: 100%; margin-top: 10px; }
         footer { background: var(--primary); color: white; text-align: center; padding: 15px; position: fixed; bottom: 0; width: 100%; }
     </style>
 </head>
 <body>
 
 <header>
-    <h1>منصة السعدي للفهرسة والاستناد - النسخة النهائية الشاملة</h1>
+    <h1>منصة السعدي للفهرسة والاستناد والذكاء الاصطناعي</h1>
     <p>بإشراف وتصميم الأستاذ عماد كاظم السعدي © 2026</p>
 </header>
 
@@ -43,6 +44,7 @@
     <button id="t1" class="active" onclick="tab('p1', 't1')">🔍 البحث الاستنادي</button>
     <button id="t2" onclick="tab('p2', 't2')">📚 فهرسة الكتب</button>
     <button id="t3" onclick="tab('p3', 't3')">📜 فهرسة المخطوطات</button>
+    <button id="t4" onclick="tab('p4', 't4')">🤖 مساعد الذكاء الاصطناعي</button>
 </nav>
 
 <div class="container">
@@ -63,73 +65,67 @@
     <div id="p2" class="page">
         <div class="card no-print">
             <h3 class="section-title">فهرسة الكتب (الحقول الكاملة MARC 21)</h3>
-            
             <div class="grid-form">
                 <div class="input-group"><label>تصنيف ديوي (082):</label><input type="text" id="b082" oninput="upB()"></div>
                 <div class="input-group"><label>تصنيف الكونجرس (050):</label><input type="text" id="b050" oninput="upB()"></div>
-                <div class="input-group"><label>المدخل الرئيسي (100-130):</label>
-                    <select id="b1T" onchange="upB()"><option value="100">100 - اسم شخص</option><option value="110">110 - هيئة</option><option value="130">130 - عنوان مقنن</option></select>
-                    <input type="text" id="b1V" oninput="upB()">
-                </div>
+                <div class="input-group"><label>المدخل الرئيسي (100-130):</label><select id="b1T" onchange="upB()"><option value="100">100 - اسم شخص</option><option value="110">110 - هيئة</option></select><input type="text" id="b1V" oninput="upB()"></div>
                 <div class="input-group"><label>العنوان الرئيسي (245$a):</label><input type="text" id="b245a" oninput="upB()"></div>
                 <div class="input-group"><label>العنوان الفرعي (245$b):</label><input type="text" id="b245b" oninput="upB()"></div>
                 <div class="input-group"><label>بيان المسؤولية (245$c):</label><input type="text" id="b245c" oninput="upB()"></div>
-                <div class="input-group"><label>العنوان البديل / الموازي (246):</label><input type="text" id="b246" oninput="upB()"></div>
+                <div class="input-group"><label>العنوان البديل (246):</label><input type="text" id="b246" oninput="upB()"></div>
                 <div class="input-group"><label>العناوين الأخرى:</label><input type="text" id="bOthT" oninput="upB()"></div>
                 <div class="input-group"><label>بيانات النشر (260):</label><input type="text" id="b260" oninput="upB()"></div>
                 <div class="input-group"><label>الوصف المادي (300):</label><input type="text" id="b300" oninput="upB()"></div>
-                
-                <div class="input-group"><label>رؤوس الموضوعات (600-651):</label>
-                    <select id="b6T" onchange="upB()"><option value="650">650 - موضوع عام</option><option value="600">600 - اسم شخص</option><option value="610">610 - هيئة</option><option value="651">651 - مكان</option></select>
-                    <input type="text" id="b6V" oninput="upB()">
-                </div>
-                <div class="input-group"><label>المداخل الإضافية (700-740):</label>
-                    <select id="b7T" onchange="upB()"><option value="700">700 - شخص إضافي</option><option value="710">710 - هيئة إضافية</option><option value="740">740 - عنوان إضافي</option></select>
-                    <input type="text" id="b7V" oninput="upB()">
-                </div>
-
+                <div class="input-group"><label>رؤوس الموضوعات (600-651):</label><select id="b6T" onchange="upB()"><option value="650">650 - موضوع عام</option><option value="600">600 - شخص</option></select><input type="text" id="b6V" oninput="upB()"></div>
+                <div class="input-group"><label>المداخل الإضافية (700-740):</label><select id="b7T" onchange="upB()"><option value="700">700 - شخص إضافي</option></select><input type="text" id="b7V" oninput="upB()"></div>
                 <div class="input-group"><label>ملاحظات عامة (500):</label><input type="text" id="b500" oninput="upB()"></div>
-                <div class="input-group"><label>ملاحظة ببليوجرافية (504):</label><input type="text" id="b504" oninput="upB()"></div>
-                <div class="input-group"><label>ملخص / مستخلص (520):</label><textarea id="b520" rows="1" oninput="upB()"></textarea></div>
+                <div class="input-group"><label>ببليوجرافية (504):</label><input type="text" id="b504" oninput="upB()"></div>
+                <div class="input-group"><label>ملخص (520):</label><textarea id="b520" rows="1" oninput="upB()"></textarea></div>
                 <div class="input-group"><label>مصدر التزويد (900):</label><input type="text" id="b900" oninput="upB()"></div>
             </div>
         </div>
-        <div class="preview-area">
-            <div class="view-box"><div class="classic-card" id="bC"></div></div>
-            <div class="view-box no-print"><div class="marc-view" id="bM"></div></div>
-        </div>
+        <div class="preview-area"><div id="bC" class="classic-card"></div><div id="bM" class="marc-view"></div></div>
     </div>
 
     <div id="p3" class="page">
         <div class="card no-print">
-            <h3 class="section-title">فهرسة المخطوطات (توصيف دقيق وفصل للملاحظات)</h3>
+            <h3 class="section-title">فهرسة المخطوطات (توصيف دقيق)</h3>
             <div class="grid-form">
                 <div class="input-group"><label>العنوان الرئيسي:</label><input type="text" id="m245a" oninput="upM()"></div>
-                <div class="input-group"><label>العنوان الفرعي:</label><input type="text" id="m245b" oninput="upM()"></div>
-                <div class="input-group"><label>العنوان البديل (246):</label><input type="text" id="m246" oninput="upM()"></div>
-                <div class="input-group"><label>العناوين الأخرى:</label><input type="text" id="mOth" oninput="upM()"></div>
                 <div class="input-group"><label>المؤلف:</label><input type="text" id="mAut" oninput="upM()"></div>
                 <div class="input-group"><label>الناسخ:</label><input type="text" id="mScr" oninput="upM()"></div>
-                <div class="input-group"><label>تاريخ النسخ:</label><input type="text" id="mDat" oninput="upM()"></div>
-                <div class="input-group"><label>نوع الخط:</label><input type="text" id="mFon" oninput="upM()"></div>
-                <div class="input-group"><label>رقم الحفظ / التصنيف:</label><input type="text" id="mCla" oninput="upM()"></div>
-                <div class="input-group" style="grid-column: span 2;"><label>بداية المخطوط:</label><textarea id="mSta" rows="3" oninput="upM()"></textarea></div>
-                <div class="input-group" style="grid-column: span 2;"><label>خاتمة المخطوط:</label><textarea id="mEnd" rows="3" oninput="upM()"></textarea></div>
-                <div class="input-group" style="grid-column: span 2;"><label>التمليكات والأختام والقيود (541):</label><textarea id="mSea" oninput="upM()"></textarea></div>
-                
-                <div class="input-group"><label>رأس الموضوع (6xx):</label><input type="text" id="mSub" oninput="upM()"></div>
-                <div class="input-group"><label>ملاحظات عامة (500):</label><input type="text" id="mNot" oninput="upM()"></div>
+                <div class="input-group" style="grid-column: span 2;"><label>بداية المخطوط:</label><textarea id="mSta" rows="2" oninput="upM()"></textarea></div>
+                <div class="input-group" style="grid-column: span 2;"><label>خاتمة المخطوط:</label><textarea id="mEnd" rows="2" oninput="upM()"></textarea></div>
+                <div class="input-group" style="grid-column: span 2;"><label>التمليكات (541):</label><textarea id="mSea" oninput="upM()"></textarea></div>
+                <div class="input-group"><label>الموضوع (6xx):</label><input type="text" id="mSub" oninput="upM()"></div>
+                <div class="input-group"><label>الملاحظات (500):</label><input type="text" id="mNot" oninput="upM()"></div>
+                <div class="input-group"><label>رقم الحفظ:</label><input type="text" id="mCla" oninput="upM()"></div>
             </div>
         </div>
-        <div class="preview-area">
-            <div class="view-box"><div class="classic-card" id="mC"></div></div>
-            <div class="view-box no-print"><div class="marc-view" id="mM"></div></div>
+        <div class="preview-area"><div id="mC" class="classic-card"></div><div id="mM" class="marc-view"></div></div>
+    </div>
+
+    <div id="p4" class="page">
+        <div class="card ai-card">
+            <h3 class="section-title" style="color:var(--ai-color)">🤖 محرك التحليل الذكي للتصنيف</h3>
+            <p>أدخل مقدمة الكتاب أو مستخلص المخطوط ليقوم المحرك باقتراح رؤوس الموضوعات وأرقام التصنيف:</p>
+            <textarea id="aiInput" rows="6" placeholder="الصق نص المقدمة أو وصف الكتاب هنا..." style="margin-bottom:15px;"></textarea>
+            <button class="btn ai-btn" onclick="aiAnalyze()">⚡ تحليل النص واقتراح البيانات</button>
+            
+            <div id="aiResult" style="margin-top:20px; display:none;">
+                <div class="grid-form">
+                    <div class="input-group"><label>رؤوس الموضوعات المقترحة:</label><input type="text" id="aiSubj" readonly></div>
+                    <div class="input-group"><label>رقم ديوي المقترح:</label><input type="text" id="aiDDC" readonly></div>
+                    <div class="input-group"><label>الكلمات المفتاحية:</label><input type="text" id="aiKeys" readonly></div>
+                </div>
+                <p style="font-size: 0.8rem; color: #666; margin-top: 10px;">* ملحوظة: هذه الاقتراحات مبنية على تحليل الكلمات الدالة في النص، يرجى مراجعتها بشرياً.</p>
+            </div>
         </div>
     </div>
 
 </div>
 
-<footer>جميع الحقوق محفوظة للخبير الأستاذ عماد كاظم السعدي © 2026</footer>
+<footer>جميع الحقوق محفوظة للأستاذ عماد كاظم السعدي © 2026</footer>
 
 <script>
     let db = [];
@@ -144,7 +140,7 @@
         r.onload = (ev) => {
             const wb = XLSX.read(ev.target.result, {type:'array'});
             db = XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]]);
-            alert("تم ربط ملف الاستناد بنجاح!");
+            alert("تم ربط ملف الاستناد!");
         };
         r.readAsArrayBuffer(e.target.files[0]);
     };
@@ -161,39 +157,33 @@
 
     function upB() {
         const v = id => document.getElementById(id).value;
-        document.getElementById('bC').innerHTML = `
-            <div class="card-class">DDC: ${v('b082')}<br>LC: ${v('b050')}</div>
-            <div class="card-body">
-                <b>${v('b1V')}</b><br>
-                ${v('b245a')} : ${v('b245b')} / ${v('b245c')}.<br>
-                ${v('b246')} | ${v('bOthT')}<br>
-                ${v('b260')}. -- ${v('b300')}.<br>
-                <u>الملاحظات:</u> ${v('b500')} -- ${v('b504')}<br>
-                <u>الملخص:</u> ${v('b520')}<br>
-                1. ${v('b6V')}. <br>أ. ${v('b7V')}
-            </div>`;
-        
-        let m = `LDR 00000nam a2200000 u 4500\n<span class="tag">050</span> ## <span class="sub">$a</span> ${v('b050')}\n<span class="tag">082</span> ## <span class="sub">$a</span> ${v('b082')}\n<span class="tag">${v('b1T')}</span> 1# <span class="sub">$a</span> ${v('b1V')}\n<span class="tag">245</span> 10 <span class="sub">$a</span> ${v('b245a')} <span class="sub">$b</span> ${v('b245b')} <span class="sub">$c</span> ${v('b245c')}\n<span class="tag">246</span> ## <span class="sub">$a</span> ${v('b246')}\n<span class="tag">260</span> ## <span class="sub">$a</span> ${v('b260')}\n<span class="tag">300</span> ## <span class="sub">$a</span> ${v('b300')}\n<span class="tag">500</span> ## <span class="sub">$a</span> ${v('b500')}\n<span class="tag">504</span> ## <span class="sub">$a</span> ${v('b504')}\n<span class="tag">520</span> ## <span class="sub">$a</span> ${v('b520')}\n<span class="tag">${v('b6T')}</span> #4 <span class="sub">$a</span> ${v('b6V')}\n<span class="tag">${v('b7T')}</span> 1# <span class="sub">$a</span> ${v('b7V')}\n<span class="tag">900</span> ## <span class="sub">$a</span> ${v('b900')}`;
+        document.getElementById('bC').innerHTML = `<div class="card-class">DDC: ${v('b082')}<br>LC: ${v('b050')}</div><div class="card-body"><b>${v('b1V')}</b><br>${v('b245a')} : ${v('b245b')} / ${v('b245c')}.<br>${v('b246')} | ${v('bOthT')}<br>${v('b260')}. -- ${v('b300')}.<br>الملاحظات: ${v('b500')} -- ${v('b504')}<br>الملخص: ${v('b520')}<br>1. ${v('b6V')}. <br>أ. ${v('b7V')}</div>`;
+        let m = `LDR 00000nam a2200000 u 4500\n<span class="tag">050</span> ## <span class="sub">$a</span> ${v('b050')}\n<span class="tag">082</span> ## <span class="sub">$a</span> ${v('b082')}\n<span class="tag">${v('b1T')}</span> 1# <span class="sub">$a</span> ${v('b1V')}\n<span class="tag">245</span> 10 <span class="sub">$a</span> ${v('b245a')} <span class="sub">$b</span> ${v('b245b')} <span class="sub">$c</span> ${v('b245c')}\n<span class="tag">500</span> ## <span class="sub">$a</span> ${v('b500')}\n<span class="tag">504</span> ## <span class="sub">$a</span> ${v('b504')}\n<span class="tag">520</span> ## <span class="sub">$a</span> ${v('b520')}\n<span class="tag">${v('b6T')}</span> #4 <span class="sub">$a</span> ${v('b6V')}\n<span class="tag">900</span> ## <span class="sub">$a</span> ${v('b900')}`;
         document.getElementById('bM').innerHTML = m;
     }
 
     function upM() {
         const v = id => document.getElementById(id).value;
-        document.getElementById('mC').innerHTML = `
-            <div class="card-class">${v('mCla')}</div>
-            <div class="card-body">
-                <b>${v('mAut')}</b><br>
-                ${v('m245a')} : ${v('m245b')} [مخطوط].<br>
-                ${v('m246')} | ${v('mOth')}<br>
-                نسخه: ${v('mScr')}، ${v('mDat')}. الخط: ${v('mFon')}.<br>
-                <b>البداية:</b> ${v('mSta')}<br>
-                <b>الخاتمة:</b> ${v('mEnd')}<br>
-                <b>التمليكات:</b> ${v('mSea')}<br>
-                1. ${v('mSub')}. <br><u>الملاحظات:</u> ${v('mNot')}
-            </div>`;
-        
-        let m = `LDR 00000nam a2200000 u 4500\n<span class="tag">090</span> ## <span class="sub">$a</span> ${v('b082')}\n<span class="tag">100</span> 1# <span class="sub">$a</span> ${v('mAut')}\n<span class="tag">245</span> 10 <span class="sub">$a</span> ${v('m245a')} <span class="sub">$b</span> ${v('m245b')}\n<span class="tag">246</span> ## <span class="sub">$a</span> ${v('m246')}\n<span class="tag">500</span> ## <span class="sub">$a</span> البداية: ${v('mSta')}\n<span class="tag">500</span> ## <span class="sub">$a</span> الخاتمة: ${v('mEnd')}\n<span class="tag">500</span> ## <span class="sub">$a</span> ملاحظات: ${v('mNot')}\n<span class="tag">541</span> ## <span class="sub">$a</span> ${v('mSea')}\n<span class="tag">650</span> #4 <span class="sub">$a</span> ${v('mSub')}\n<span class="tag">700</span> 1# <span class="sub">$a</span> ${v('mScr')} (ناسخ)`;
+        document.getElementById('mC').innerHTML = `<div class="card-class">${v('mCla')}</div><div class="card-body"><b>${v('mAut')}</b><br>${v('m245a')} [مخطوط].<br>نسخه: ${v('mScr')}.<br><b>البداية:</b> ${v('mSta')}<br><b>الخاتمة:</b> ${v('mEnd')}<br>1. ${v('mSub')}. <br>ملاحظات: ${v('mNot')}</div>`;
+        let m = `<span class="tag">100</span> 1# <span class="sub">$a</span> ${v('mAut')}\n<span class="tag">245</span> 10 <span class="sub">$a</span> ${v('m245a')}\n<span class="tag">500</span> ## <span class="sub">$a</span> البداية: ${v('mSta')}\n<span class="tag">541</span> ## <span class="sub">$a</span> ${v('mSea')}\n<span class="tag">650</span> #4 <span class="sub">$a</span> ${v('mSub')}`;
         document.getElementById('mM').innerHTML = m;
+    }
+
+    // وظيفة الذكاء الاصطناعي (محاكاة تحليل النص)
+    function aiAnalyze() {
+        const text = document.getElementById('aiInput').value;
+        if(!text) { alert("يرجى إدخال نص للتحليل"); return; }
+        
+        // محرك بسيط لتحليل الكلمات المفتاحية واقتراح التصنيف
+        let ddc = "000"; let subj = "موضوع عام";
+        if(text.includes("فقه") || text.includes("شريعة")) { ddc = "217"; subj = "الفقه الإسلامي"; }
+        else if(text.includes("تاريخ") || text.includes("زمن")) { ddc = "900"; subj = "التاريخ العام"; }
+        else if(text.includes("لغة") || text.includes("نحو")) { ddc = "410"; subj = "اللغة العربية - نحو وصرف"; }
+        
+        document.getElementById('aiResult').style.display = "block";
+        document.getElementById('aiSubj').value = subj;
+        document.getElementById('aiDDC').value = ddc;
+        document.getElementById('aiKeys').value = text.split(' ').slice(0, 5).join('، ');
     }
 </script>
 </body>
