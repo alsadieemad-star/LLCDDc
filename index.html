@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <title>النظام الأكاديمي للفهرسة</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <style>
+        :root { --primary: #2c3e50; --accent: #27ae60; --danger: #e74c3c; }
+        body { font-family: 'Arial', sans-serif; background: #f0f2f5; margin: 0; padding: 20px; color: #333; }
+        .container { max-width: 950px; margin: auto; background: #fff; border-radius: 10px; box-shadow: 0 4px 20px rgba(0,0,0,0.15); overflow: hidden; }
+        .header { background: var(--primary); color: white; padding: 20px; text-align: center; }
+        .nav { display: flex; background: #eee; }
+        .nav button { flex: 1; padding: 15px; border: none; cursor: pointer; font-size: 16px; font-weight: bold; background: #ddd; }
+        .nav button.active { background: #fff; color: var(--accent); border-top: 4px solid var(--accent); }
+        .content { padding: 30px; }
+        .page { display: none; }
+        .active { display: block; }
+        .input-group { margin-bottom: 15px; }
+        input[type="text"], input[type="file"] { width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 5px; font-size: 14px; }
+        .btns { display: flex; gap: 10px; margin-top: 15px; }
+        button.action { flex: 1; padding: 12px; border: none; border-radius: 5px; color: white; cursor: pointer; transition: 0.3s; }
+        .btn-search { background: var(--primary); }
+        .btn-start { background: #2980b9; }
+        .btn-clear { background: var(--danger); }
+        .btn-export { background: var(--accent); width: 100%; margin-top: 15px; font-size: 18px; }
+        #resultsArea { margin-top: 25px; max-height: 400px; overflow-y: auto; }
+        table { width: 100%; border-collapse: collapse; }
+        th, td { border: 1px solid #ddd; padding: 12px; text-align: center; }
+        th { background: #f8f9fa; position: sticky; top: 0; }
+        .marc-box { background: #f9f9f9; border: 2px dashed #ccc; padding: 15px; font-family: 'Courier New', monospace; white-space: pre-wrap; direction: ltr; text-align: left; margin-top: 20px; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header"><h1>الموقع الأكاديمي لإدارة الفهرسة</h1></div>
+    <div class="nav">
+        <button id="tab1" class="active" onclick="openPage('searchPage', 'tab1')">البحث في السجلات</button>
+        <button id="tab2" onclick="openPage('inputPage', 'tab2')">إدخال بطاقة MARC</button>
+    </div>
+
+    <div class="content">
+        <div id="searchPage" class="page active">
+            <h3>خطوة 1: ارفع ملف الإكسل</h3>
+            <input type="file" id="fileUploader" accept=".xlsx, .xls">
+            <hr>
+            <h3>خطوة 2: ابحث في البيانات</h3>
+            <input type="text" id="searchKeyword" placeholder="اكتب الكلمة هنا...">
+            <div class="btns">
+                <button class="action btn-search" onclick="doSearch('contains')">يحتوي على</button>
+                <button class="action btn-start" onclick="doSearch('starts')">يبدأ بـ</button>
+                <button class="action btn-clear" onclick="resetApp()">مسح النتائج والعودة</button>
+            </div>
+            <div id="resultsArea"></div>
+        </div>
+
+        <div id="inputPage" class="page">
+            <h3>إدخال بيانات بطاقة فهرسة جديدة</h3>
+            <div class="input-group"><label>العنوان (245):</label><input type="text" id="f245"></div>
+            <div class="input-group"><label>المؤلف (100):</label><input type="text" id="f100"></div>
+            <div class="input-group"><label>الناشر وسنة النشر (260):</label><input type="text" id="f260"></div>
+            <div class="input-group"><label>ردمك - ISBN (020):</label><input type="text" id="f020"></div>
+            <button class="action btn-export" onclick="makeMarc()">تحويل إلى MARC وتصدير البطاقة</button>
+            
+            <div id="marcContainer" style="display:none;">
+                <h4>معاينة صيغة مارك 21:</h4>
+                <div class="marc-box" id="marcText"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    let masterData = [];
+
+    // التحقق من تحميل المكتبة
+    window.onload = function() {
+        if (typeof XLSX === 'undefined') {
+            alert("فشل تحميل مكتبة الإكسل. تأكد من اتصالك بالإنترنت.");
+        }
+    };
+
+    function openPage(pageId, tabId) {
+        document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+        document.querySelectorAll('.nav button').forEach(b => b.classList.remove('active'));
+        document.getElementById(pageId).classList.add('active');
+        document.getElementById(tabId).classList.add('active');
+    }
+
+    document.getElementById('fileUploader').addEventListener('change', function(e) {
+        const file = e.target.files[0];
+        const reader = new FileReader();
+        reader.onload = function(event) {
+            const bstr = event.target.result;
+            const wb = XLSX.read(bstr, {type: 'binary'});
+            const wsname = wb.SheetNames[0];
+            const ws = wb.Sheets[wsname];
+            masterData = XLSX.utils.sheet_to_json(ws);
+            alert("تم تحميل " + masterData.length + " سجل بنجاح.");
+        };
+        reader.readAsBinaryString(file);
+    });
+
+    function doSearch(type) {
+        const word = document.getElementById('searchKeyword').value.toLowerCase();
+        if(!word) { alert("أدخل كلمة للبحث"); return; }
+        if(masterData.length === 0) { alert("ارفع ملف الإكسل أولاً"); return; }
+
+        const results = masterData.filter(row => {
+            return Object.values(row).some(v => {
+                const val = String(v).toLowerCase();
+                return type === 'contains' ? val.includes(word) : val.startsWith(word);
+            });
+        });
+
+        showTable(results);
+    }
+
+    function showTable(data) {
+        if(data.length === 0) { document.getElementById('resultsArea').innerHTML = "لا توجد نتائج."; return; }
+        let html = '<table><thead><tr>';
+        Object.keys(data[0]).forEach(k => html += `<th>${k}</th>`);
+        html += '</tr></thead><tbody>';
+        data.forEach(row => {
+            html += '<tr>' + Object.values(row).map(v => `<td>${v}</td>`).join('') + '</tr>';
+        });
+        html += '</tbody></table>';
+        document.getElementById('resultsArea').innerHTML = html;
+    }
+
+    function resetApp() {
+        document.getElementById('searchKeyword').value = "";
+        document.getElementById('resultsArea').innerHTML = "";
+        document.getElementById('fileUploader').value = "";
+        masterData = [];
+    }
+
+    function makeMarc() {
+        const t = document.getElementById('f245').value;
+        const a = document.getElementById('f100').value;
+        const p = document.getElementById('f260').value;
+        const i = document.getElementById('f020').value;
+
+        const marc = `000 00000nam a2200000 u 4500\n020 ## $a ${i}\n100 1# $a ${a}\n245 10 $a ${t}\n260 ## $a ${p}`;
+        document.getElementById('marcText').innerText = marc;
+        document.getElementById('marcContainer').style.display = 'block';
+
+        const blob = new Blob([marc], {type: 'text/plain'});
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.download = `Record_MARC.txt`;
+        link.click();
+    }
+</script>
+
+</body>
+</html>
