@@ -3,352 +3,218 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>نظام السعدي للفهرسة الأكاديمية</title>
+    <title>نظام السعدي للفهرسة الأكاديمية المتقدمة</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     <style>
         :root {
-            --primary-color: #1a2a6c;
-            --secondary-color: #b21f1f;
-            --accent-color: #27ae60;
-            --bg-color: #f8f9fa;
-            --card-bg: #ffffff;
-            --text-main: #2d3436;
+            --primary: #1a2a6c;
+            --accent: #27ae60;
+            --danger: #b21f1f;
+            --code-bg: #282c34;
         }
 
         body {
-            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-            background-color: var(--bg-color);
-            margin: 0;
-            padding: 0;
-            color: var(--text-main);
-            line-height: 1.6;
+            font-family: 'Segoe UI', Tahoma, sans-serif;
+            background-color: #f0f2f5;
+            margin: 0; padding: 0; padding-bottom: 80px;
         }
 
-        /* الهيدر الأكاديمي */
         header {
-            background: linear-gradient(135deg, var(--primary-color), #2a4858);
-            color: white;
-            padding: 2rem 1rem;
-            text-align: center;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            background: linear-gradient(135deg, var(--primary), #2a4858);
+            color: white; padding: 25px; text-align: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
         }
 
-        header h1 { margin: 0; font-size: 1.8rem; letter-spacing: 1px; }
-        header p { margin: 5px 0 0; opacity: 0.9; font-weight: 300; }
+        .container { max-width: 1200px; margin: 20px auto; padding: 0 15px; }
 
-        .container {
-            max-width: 1200px;
-            margin: -30px auto 0;
-            padding: 0 15px 100px;
+        .card {
+            background: white; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            padding: 25px; margin-bottom: 20px;
         }
 
-        /* نظام التبويب للموبايل */
-        .nav-tabs {
-            display: flex;
-            background: white;
-            border-radius: 10px 10px 0 0;
-            overflow: hidden;
-            box-shadow: 0 -2px 10px rgba(0,0,0,0.05);
+        /* تنسيق الحقول */
+        .grid-layout {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px; margin-bottom: 20px;
         }
 
-        .nav-tabs button {
-            flex: 1;
-            padding: 15px;
-            border: none;
-            background: #eee;
-            cursor: pointer;
-            font-weight: bold;
-            transition: 0.3s;
-            color: #666;
-            font-size: 0.9rem;
-        }
-
-        .nav-tabs button.active {
-            background: white;
-            color: var(--primary-color);
-            border-bottom: 4px solid var(--secondary-color);
-        }
-
-        .main-card {
-            background: white;
-            padding: 20px;
-            border-radius: 0 0 10px 10px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
-        }
-
-        /* تنسيق المدخلات */
-        .section-title {
-            border-right: 4px solid var(--secondary-color);
-            padding-right: 10px;
-            margin: 20px 0;
-            color: var(--primary-color);
-            font-size: 1.2rem;
-        }
-
-        .grid-inputs {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 20px;
-        }
-
-        .input-box label {
-            display: block;
-            margin-bottom: 5px;
-            font-weight: 600;
-            font-size: 0.85rem;
-            color: #555;
-        }
-
+        label { display: block; margin-bottom: 5px; font-weight: bold; color: var(--primary); font-size: 0.9rem; }
         input, select, textarea {
-            width: 100%;
-            padding: 12px;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            font-size: 1rem;
-            transition: border 0.3s;
+            width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 8px;
+            box-sizing: border-box; font-size: 1rem;
         }
 
-        input:focus { border-color: var(--primary-color); outline: none; }
-
-        /* المعاينة */
-        .preview-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-            gap: 20px;
-            margin-top: 30px;
+        /* منطقة المعاينة الفورية */
+        .preview-container {
+            display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 30px;
         }
 
-        .preview-pane {
-            border: 1px solid #eee;
-            border-radius: 12px;
-            padding: 15px;
-            background: #fff;
+        .view-box { border: 1px solid #ddd; border-radius: 10px; padding: 15px; background: #fff; }
+        .view-title { font-weight: bold; color: var(--primary); margin-bottom: 10px; border-bottom: 2px solid #eee; padding-bottom: 5px; }
+
+        /* سجل مارك الحي */
+        #marcLiveView {
+            background: var(--code-bg); color: #abb2bf; padding: 15px; border-radius: 8px;
+            direction: ltr; text-align: left; font-family: 'Consolas', monospace;
+            white-space: pre-wrap; line-height: 1.5; font-size: 0.9rem;
         }
+        .marc-tag { color: #e06c75; font-weight: bold; }
+        .marc-sub { color: #d19a66; }
 
-        .classic-card {
-            width: 100%;
-            min-height: 250px;
-            border: 1px solid #ccc;
-            padding: 1.5rem;
-            font-family: 'Times New Roman', serif;
-            position: relative;
-            background: #fff;
-            box-sizing: border-box;
+        /* البطاقة الكلاسيكية */
+        .catalog-card {
+            width: 100%; min-height: 250px; border: 1px solid #000; padding: 20px;
+            font-family: 'Times New Roman', serif; position: relative; background: #fff; box-sizing: border-box;
         }
+        .class-area { position: absolute; top: 20px; right: 20px; font-weight: bold; }
+        .content-area { margin-right: 80px; text-align: justify; }
 
-        .call-number { position: absolute; top: 1.5rem; right: 1.5rem; font-weight: bold; line-height: 1; }
-        .card-main-content { margin-right: 70px; text-align: justify; }
-
-        .marc-code {
-            background: #1e1e1e;
-            color: #9cdcfe;
-            padding: 15px;
-            border-radius: 8px;
-            direction: ltr;
-            text-align: left;
-            font-family: 'Consolas', monospace;
-            font-size: 0.85rem;
-            overflow-x: auto;
-            white-space: pre-wrap;
-        }
-
-        /* الأزرار */
-        .action-bar {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-            gap: 10px;
-            margin-top: 25px;
-        }
-
+        .btn-group { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 20px; }
         .btn {
-            padding: 12px;
-            border: none;
-            border-radius: 8px;
-            color: white;
-            font-weight: bold;
-            cursor: pointer;
-            transition: 0.3s;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
+            flex: 1; padding: 15px; border: none; border-radius: 8px; color: white;
+            font-weight: bold; cursor: pointer; transition: 0.3s; min-width: 150px;
         }
-
-        .btn-p { background: var(--primary-color); }
-        .btn-s { background: var(--accent-color); }
-        .btn-d { background: var(--secondary-color); }
+        .btn-p { background: var(--primary); }
+        .btn-s { background: var(--accent); }
+        .btn-d { background: var(--danger); }
 
         footer {
-            background: #1a2a6c;
-            color: white;
-            text-align: center;
-            padding: 15px;
-            position: fixed;
-            bottom: 0;
-            width: 100%;
-            font-size: 0.9rem;
-            box-shadow: 0 -2px 10px rgba(0,0,0,0.2);
-        }
-
-        @media (max-width: 600px) {
-            header { padding: 1rem; }
-            header h1 { font-size: 1.4rem; }
-            .grid-inputs { grid-template-columns: 1fr; }
-            .classic-card { font-size: 12px; }
+            background: var(--primary); color: white; text-align: center;
+            padding: 15px; position: fixed; bottom: 0; width: 100%; font-weight: bold;
         }
 
         @media print {
-            .nav-tabs, .action-bar, .grid-inputs, header, footer { display: none !important; }
-            .classic-card { border: none !important; width: 5in; height: 3in; }
+            .no-print { display: none !important; }
+            .catalog-card { border: none !important; }
         }
     </style>
 </head>
 <body>
 
 <header>
-    <h1>نظام السعدي للفهرسة وإدارة المراجع</h1>
-    <p>مختبر البحث الأكاديمي الرقمي</p>
+    <h1>مركز السعدي للبحث والفهرسة الرقمية</h1>
+    <p>تطبيق الفهرسة الأكاديمي المتكامل MARC 21</p>
 </header>
 
 <div class="container">
-    <div class="nav-tabs">
-        <button id="btnTab1" class="active" onclick="switchTab('tabSearch', 'btnTab1')">🔍 محرك البحث</button>
-        <button id="btnTab2" onclick="switchTab('tabInput', 'btnTab2')">📝 مركز الفهرسة</button>
+    <div class="card no-print">
+        <h3 style="color:var(--primary); border-right: 4px solid var(--accent); padding-right:10px;">إدخال بيانات السجل الأكاديمي</h3>
+        <div class="grid-layout">
+            <div class="input-item"><label>المؤلف الرئيسي (100):</label><input type="text" id="m100" placeholder="اسم المؤلف..." oninput="generateAll()"></div>
+            <div class="input-item"><label>العنوان الرئيسي (245$a):</label><input type="text" id="m245a" oninput="generateAll()"></div>
+            <div class="input-item"><label>العنوان الفرعي (245$b):</label><input type="text" id="m245b" oninput="generateAll()"></div>
+            <div class="input-item"><label>بيان المسؤولية (245$c):</label><input type="text" id="m245c" oninput="generateAll()"></div>
+            <div class="input-item"><label>بيان الطبعة (250):</label><input type="text" id="m250" oninput="generateAll()"></div>
+            <div class="input-item"><label>بيانات النشر (260):</label><input type="text" id="m260" oninput="generateAll()"></div>
+            <div class="input-item"><label>الوصف المادي (300):</label><input type="text" id="m300" placeholder="ص ؛ سم" oninput="generateAll()"></div>
+            <div class="input-item">
+                <label>رقم التصنيف:</label>
+                <select id="cType" style="width:30%" onchange="generateAll()"><option value="082">ديوي</option><option value="050">الكونجرس</option></select>
+                <input type="text" id="cVal" style="width:68%" placeholder="الرقم..." oninput="generateAll()">
+            </div>
+            <div class="input-item"><label>الموضوعات (650):</label><input type="text" id="m650" oninput="generateAll()"></div>
+            <div class="input-item"><label>بيانات التزويد (900):</label><input type="text" id="m900" placeholder="مصدر - ثمن - تاريخ" oninput="generateAll()"></div>
+            <div class="input-item" style="grid-column: span 2;"><label>الملاحظات (500):</label><textarea id="m500" rows="2" oninput="generateAll()"></textarea></div>
+        </div>
     </div>
 
-    <div class="main-card">
-        <div id="tabSearch" class="page active">
-            <h3 class="section-title">البحث في المستودع الرقمي</h3>
-            <input type="file" id="excelUpload" accept=".xlsx, .xls" style="margin-bottom:15px;">
-            <input type="text" id="query" placeholder="ابحث بالكلمة المفتاحية...">
-            <div class="action-bar">
-                <button class="btn btn-p" onclick="processSearch('in')">يحتوي على</button>
-                <button class="btn btn-p" onclick="processSearch('start')" style="background:#2980b9">يبدأ بـ</button>
-                <button class="btn btn-d" onclick="location.reload()">تحديث النظام</button>
+    <div class="preview-container">
+        <div class="view-box">
+            <div class="view-title">بطاقة الفهرسة (معاينة)</div>
+            <div class="catalog-card" id="cardPrint">
+                <div class="class-area" id="v_class"></div>
+                <div class="content-area">
+                    <div id="v_auth" style="font-weight:bold; margin-bottom:5px;"></div>
+                    <div id="v_title" style="text-indent: -20px; padding-right: 20px;"></div>
+                    <div id="v_phys" style="margin-top:5px;"></div>
+                    <div id="v_notes" style="margin-top:10px; font-size:0.85rem; color:#444;"></div>
+                    <div id="v_subj" style="margin-top:10px; font-size:0.85rem; font-weight:bold;"></div>
+                </div>
             </div>
-            <div id="searchResults" style="margin-top:20px; overflow-x:auto;"></div>
         </div>
 
-        <div id="tabInput" class="page" style="display:none;">
-            <h3 class="section-title">بيانات السجل الأكاديمي (MARC 21)</h3>
-            <div class="grid-inputs">
-                <div class="input-box"><label>المدخل الرئيسي / المؤلف (100):</label><input type="text" id="f100" oninput="liveView()"></div>
-                <div class="input-box"><label>العنوان الرئيسي (245$a):</label><input type="text" id="f245a" oninput="liveView()"></div>
-                <div class="input-box"><label>العنوان الفرعي (245$b):</label><input type="text" id="f245b" oninput="liveView()"></div>
-                <div class="input-box"><label>بيان المسؤولية (245$c):</label><input type="text" id="f245c" oninput="liveView()"></div>
-                <div class="input-box"><label>الطبعة (250):</label><input type="text" id="f250" oninput="liveView()"></div>
-                <div class="input-box"><label>الناشر وسنة النشر (260/264):</label><input type="text" id="f260" oninput="liveView()"></div>
-                <div class="input-box"><label>الوصف المادي (300):</label><input type="text" id="f300" oninput="liveView()"></div>
-                <div class="input-box"><label>نظام التصنيف ورقم الاستدعاء:</label>
-                    <select id="cType" style="margin-bottom:5px;" onchange="liveView()"><option value="082">ديوي العشري</option><option value="050">مكتبة الكونجرس</option></select>
-                    <input type="text" id="cVal" placeholder="رقم التصنيف + رقم المؤلف" oninput="liveView()">
-                </div>
-                <div class="input-group full-width"><label>رؤوس الموضوعات (650):</label><input type="text" id="f650" oninput="liveView()"></div>
-                <div class="input-group full-width"><label>الملاحظات (500):</label><textarea id="f500" oninput="liveView()"></textarea></div>
-                <div class="input-box" style="background:#fff3f3; padding:10px; border-radius:8px;"><label>بيانات التزويد (900):</label><input type="text" id="f900" placeholder="المصدر - الثمن - التاريخ" oninput="liveView()"></div>
-            </div>
-
-            <div class="preview-grid">
-                <div class="preview-pane">
-                    <div style="font-weight:bold; color:var(--primary-color); margin-bottom:10px;">📄 بطاقة الفهرسة التقليدية</div>
-                    <div class="classic-card" id="classicCard">
-                        <div class="call-number" id="v_call"></div>
-                        <div class="card-main-content">
-                            <div id="v_auth" style="font-weight:bold;"></div>
-                            <div id="v_tit_area" style="text-indent: -20px; padding-right: 20px;"></div>
-                            <div id="v_phys" style="margin-top:5px;"></div>
-                            <div id="v_notes" style="margin-top:10px; font-size:0.85rem; color:#444;"></div>
-                            <div id="v_subj" style="margin-top:10px; font-size:0.85rem;"></div>
-                        </div>
-                    </div>
-                </div>
-                <div class="preview-pane">
-                    <div style="font-weight:bold; color:var(--primary-color); margin-bottom:10px;">💻 سجل MARC 21 القياسي</div>
-                    <div class="marc-code" id="marcCode"></div>
-                </div>
-            </div>
-
-            <div class="action-bar">
-                <button class="btn btn-s" onclick="exportExcel()">📥 تصدير Excel</button>
-                <button class="btn btn-p" onclick="window.print()">🖨️ طباعة البطاقة</button>
-                <button class="btn btn-d" onclick="exportTxt()">💾 تصدير MARC</button>
-            </div>
+        <div class="view-box no-print">
+            <div class="view-title">سجل MARC 21 (توليد مباشر)</div>
+            <div id="marcLiveView"></div>
         </div>
+    </div>
+
+    <div class="btn-group no-print">
+        <button class="btn btn-p" onclick="window.print()">🖨️ طباعة البطاقة</button>
+        <button class="btn btn-s" onclick="exportToExcel()">📊 تصدير كافة الحقول (Excel)</button>
+        <button class="btn btn-d" onclick="exportToMarc()">💾 تصدير السجل (Text)</button>
     </div>
 </div>
 
-<footer>جميع الحقوق محفوظة للمؤلف © عماد كاظم السعدي 2026</footer>
+<footer>جميع الحقوق محفوظة © عماد كاظم السعدي 2026</footer>
 
 <script>
-    let db = [];
+    function generateAll() {
+        const val = id => document.getElementById(id).value;
+        
+        // 1. تحديث البطاقة الكلاسيكية
+        document.getElementById('v_class').innerText = val('cVal');
+        document.getElementById('v_auth').innerText = val('m100');
+        document.getElementById('v_title').innerText = `${val('m245a')} : ${val('m245b')} / ${val('m245c')}. -- ط ${val('m250')}. -- ${val('m260')}.`;
+        document.getElementById('v_phys').innerText = val('m300');
+        document.getElementById('v_notes').innerText = val('m500');
+        document.getElementById('v_subj').innerText = val('m650') ? `1. ${val('m650')}` : "";
 
-    function switchTab(tabId, btnId) {
-        document.querySelectorAll('.page').forEach(p => p.style.display = 'none');
-        document.querySelectorAll('.nav-tabs button').forEach(b => b.classList.remove('active'));
-        document.getElementById(tabId).style.display = 'block';
-        document.getElementById(btnId).classList.add('active');
+        // 2. توليد مارك 21 للعرض (مع التنسيق)
+        let marcHtml = `LDR 00000nam a2200000 u 4500\n`;
+        marcHtml += `<span class="marc-tag">${document.getElementById('cType').value}</span> ## <span class="marc-sub">$a</span> ${val('cVal')}\n`;
+        if(val('m100')) marcHtml += `<span class="marc-tag">100</span> 1# <span class="marc-sub">$a</span> ${val('m100')}\n`;
+        
+        let tag245 = `<span class="marc-tag">245</span> 10 <span class="marc-sub">$a</span> ${val('m245a')}`;
+        if(val('m245b')) tag245 += ` <span class="marc-sub">$b</span> ${val('m245b')}`;
+        if(val('m245c')) tag245 += ` <span class="marc-sub">$c</span> ${val('m245c')}`;
+        marcHtml += tag245 + `\n`;
+
+        if(val('m250')) marcHtml += `<span class="marc-tag">250</span> ## <span class="marc-sub">$a</span> ${val('m250')}\n`;
+        if(val('m260')) marcHtml += `<span class="marc-tag">260</span> ## <span class="marc-sub">$a</span> ${val('m260')}\n`;
+        if(val('m300')) marcHtml += `<span class="marc-tag">300</span> ## <span class="marc-sub">$a</span> ${val('m300')}\n`;
+        if(val('m500')) marcHtml += `<span class="marc-tag">500</span> ## <span class="marc-sub">$a</span> ${val('m500')}\n`;
+        if(val('m650')) marcHtml += `<span class="marc-tag">650</span> #4 <span class="marc-sub">$a</span> ${val('m650')}\n`;
+        if(val('m900')) marcHtml += `<span class="marc-tag">900</span> ## <span class="marc-sub">$a</span> ${val('m900')}\n`;
+
+        document.getElementById('marcLiveView').innerHTML = marcHtml;
     }
 
-    document.getElementById('excelUpload').addEventListener('change', function(e) {
-        const reader = new FileReader();
-        reader.onload = (ev) => {
-            const wb = XLSX.read(ev.target.result, {type: 'array'});
-            db = XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]]);
-            alert("تم ربط قاعدة البيانات بنجاح!");
-        };
-        reader.readAsArrayBuffer(e.target.files[0]);
-    });
-
-    function processSearch(mode) {
-        const val = document.getElementById('query').value.toLowerCase();
-        if(!db.length) return alert("يرجى تحميل الملف أولاً");
-        const results = db.filter(r => Object.values(r).some(v => 
-            mode === 'in' ? String(v).toLowerCase().includes(val) : String(v).toLowerCase().startsWith(val)
-        ));
-        renderTable(results);
+    // تصدير مارك كملف نصي (يشمل كل الحقول)
+    function exportToMarc() {
+        const text = document.getElementById('marcLiveView').innerText;
+        const blob = new Blob([text], {type: 'text/plain'});
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = `MARC_Record_AlSaadi.txt`;
+        a.click();
     }
 
-    function renderTable(data) {
-        let h = '<table border="1" style="width:100%; border-collapse:collapse; background:white;"><tr>' + 
-            Object.keys(db[0]).map(k => `<th style="padding:10px; background:#f1f1f1;">${k}</th>`).join('') + '</tr>';
-        data.forEach(r => h += '<tr>' + Object.values(r).map(v => `<td style="padding:8px; text-align:center;">${v}</td>`).join('') + '</tr>');
-        document.getElementById('searchResults').innerHTML = h + '</table>';
-    }
-
-    function liveView() {
-        const get = id => document.getElementById(id).value;
-        // تحديث البطاقة
-        document.getElementById('v_call').innerText = get('cVal');
-        document.getElementById('v_auth').innerText = get('f100');
-        document.getElementById('v_tit_area').innerText = `${get('f245a')} : ${get('f245b')} / ${get('f245c')}. -- ط ${get('f250')}. -- ${get('f260')}.`;
-        document.getElementById('v_phys').innerText = get('m300');
-        document.getElementById('v_notes').innerText = get('f500');
-        document.getElementById('v_subj').innerText = get('f650') ? `1. ${get('f650')}` : "";
-
-        // تحديث مارك
-        let m = `LDR 00000nam a2200000 u 4500\n`;
-        m += `${document.getElementById('cType').value} ## $a ${get('cVal')}\n`;
-        if(get('f100')) m += `100 1# $a ${get('f100')}\n`;
-        m += `245 10 $a ${get('f245a')} $b ${get('f245b')} $c ${get('f245c')}\n`;
-        if(get('f250')) m += `250 ## $a ${get('f250')}\n`;
-        if(get('f260')) m += `260 ## $a ${get('f260')}\n`;
-        if(get('f900')) m += `900 ## $a ${get('f900')}\n`;
-        document.getElementById('marcCode').innerText = m;
-    }
-
-    function exportTxt() {
-        const blob = new Blob([document.getElementById('marcCode').innerText], {type: 'text/plain'});
-        const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'Al_Saadi_MARC.txt'; a.click();
-    }
-
-    function exportExcel() {
-        const get = id => document.getElementById(id).value;
-        const row = [{ "المؤلف": get('f100'), "العنوان": get('f245a'), "التصنيف": get('cVal'), "بيانات التزويد": get('f900') }];
-        const ws = XLSX.utils.json_to_sheet(row);
+    // تصدير إكسل (يشمل كافة الحقول المدخلة)
+    function exportToExcel() {
+        const val = id => document.getElementById(id).value;
+        const data = [{
+            "المؤلف": val('m100'),
+            "العنوان الرئيسي": val('m245a'),
+            "العنوان الفرعي": val('m245b'),
+            "بيان المسؤولية": val('m245c'),
+            "الطبعة": val('m250'),
+            "النشر": val('m260'),
+            "الوصف المادي": val('m300'),
+            "رقم التصنيف": val('cVal'),
+            "الموضوعات": val('m650'),
+            "الملاحظات": val('m500'),
+            "بيانات التزويد": val('m900')
+        }];
+        const ws = XLSX.utils.json_to_sheet(data);
         const wb = XLSX.utils.book_new();
-        XLSX.utils.book_append_sheet(wb, ws, "Database");
-        XLSX.writeFile(wb, "Acquisition_Record.xlsx");
+        XLSX.utils.book_append_sheet(wb, ws, "FullCatalog");
+        XLSX.writeFile(wb, "Full_Academic_Record.xlsx");
     }
+
+    // تشغيل التوليد الأولي
+    window.onload = generateAll;
 </script>
+
 </body>
 </html>
