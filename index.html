@@ -85,4 +85,137 @@
         <div id="inputP" class="page">
             <div class="grid-form">
                 <div class="input-group"><label>المؤلف (100):</label><input type="text" id="m100" oninput="updateV()"></div>
-                <div class="input-group"><label>العنوان الرئيسي (245$a):</label><input type="text" id="m245a" oninput="updateV()">
+                <div class="input-group"><label>العنوان الرئيسي (245$a):</label><input type="text" id="m245a" oninput="updateV()"></div>
+                <div class="input-group"><label>العنوان الفرعي (245$b):</label><input type="text" id="m245b" oninput="updateV()"></div>
+                <div class="input-group"><label>بيان المسؤولية (245$c):</label><input type="text" id="m245c" oninput="updateV()"></div>
+                <div class="input-group"><label>بيان الطبعة (250):</label><input type="text" id="m250" oninput="updateV()"></div>
+                <div class="input-group"><label>بيان الناشر (260):</label><input type="text" id="m260" oninput="updateV()"></div>
+                <div class="input-group"><label>الوصف المادي (300):</label><input type="text" id="m300" oninput="updateV()"></div>
+                <div class="input-group"><label>السلسلة (490):</label><input type="text" id="m490" oninput="updateV()"></div>
+                <div class="input-group">
+                    <label>نظام التصنيف:</label>
+                    <select id="cType" onchange="updateV()"><option value="082">ديوي</option><option value="050">الكونجرس</option></select>
+                    <input type="text" id="cVal" placeholder="رقم التصنيف..." oninput="updateV()">
+                </div>
+                <div class="input-group"><label>رؤوس الموضوعات (650):</label><input type="text" id="m650" oninput="updateV()"></div>
+                <div class="input-group full-width"><label>الملاحظات (500):</label><textarea id="m500" oninput="updateV()"></textarea></div>
+            </div>
+
+            <div class="preview-section">
+                <div class="preview-box">
+                    <div class="preview-title">معاينة البطاقة (3×5 بوصة)</div>
+                    <div class="classic-card" id="cardView">
+                        <div class="card-class" id="p_class"></div>
+                        <div class="card-body">
+                            <div id="p_auth" style="font-weight:bold; margin-bottom:5px;"></div>
+                            <div class="hanging-indent" id="p_title_area"></div>
+                            <div id="p_phys" style="margin-top:5px;"></div>
+                            <div id="p_series" style="margin-top:5px;"></div>
+                            <div id="p_notes" style="margin-top:10px; font-size:12px;"></div>
+                            <div id="p_subj" style="margin-top:10px; font-size:12px;"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="preview-box">
+                    <div class="preview-title">معاينة سجل MARC 21</div>
+                    <div class="marc-view" id="marcView"></div>
+                </div>
+            </div>
+
+            <div class="btn-group">
+                <button class="btn btn-save" onclick="exportTxt()">تصدير MARC (Txt)</button>
+                <button class="btn btn-excel" onclick="exportXls()">تصدير للسجل (Excel)</button>
+                <button class="btn btn-print" onclick="window.print()">طباعة البطاقة</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<footer>جميع الحقوق محفوظة © عماد كاظم السعدي 2026</footer>
+
+<script>
+    let db = [];
+
+    function showP(pId, tId) {
+        document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+        document.querySelectorAll('.nav button').forEach(b => b.classList.remove('active'));
+        document.getElementById(pId).classList.add('active');
+        document.getElementById(tId).classList.add('active');
+    }
+
+    // معالجة ملف الإكسل
+    document.getElementById('xlIn').addEventListener('change', function(e) {
+        const reader = new FileReader();
+        reader.onload = (ev) => {
+            const wb = XLSX.read(ev.target.result, {type: 'array'});
+            db = XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]]);
+            alert("تم تحميل البيانات بنجاح.");
+        };
+        reader.readAsArrayBuffer(e.target.files[0]);
+    });
+
+    function search(mode) {
+        const txt = document.getElementById('q').value.toLowerCase();
+        const filtered = db.filter(r => Object.values(r).some(v => 
+            mode === 'in' ? String(v).toLowerCase().includes(txt) : String(v).toLowerCase().startsWith(txt)
+        ));
+        renderTable(filtered);
+    }
+
+    function renderTable(data) {
+        if(!data.length) return document.getElementById('res').innerHTML = "لا توجد نتائج.";
+        let h = '<table border="1" style="width:100%; border-collapse:collapse;"><tr>';
+        Object.keys(data[0]).forEach(k => h += `<th style="padding:8px; background:#eee;">${k}</th>`);
+        data.forEach(r => { h += '<tr>'; Object.values(r).forEach(v => h += `<td style="padding:8px; text-align:center;">${v}</td>`); h += '</tr>'; });
+        document.getElementById('res').innerHTML = h + '</table>';
+    }
+
+    // تحديث المعاينة الحية
+    function updateV() {
+        const get = id => document.getElementById(id).value;
+        
+        // تحديث البطاقة التقليدية
+        document.getElementById('p_class').innerText = get('cVal');
+        document.getElementById('p_auth').innerText = get('m100');
+        document.getElementById('p_title_area').innerText = `${get('m245a')} : ${get('m245b')} / ${get('m245c')}. -- ط ${get('m250')}. -- ${get('m260')}.`;
+        document.getElementById('p_phys').innerText = get('m300');
+        document.getElementById('p_series').innerText = get('m490') ? `(${get('m490')})` : "";
+        document.getElementById('p_notes').innerText = get('m500');
+        document.getElementById('p_subj').innerText = get('m650') ? `1. ${get('m650')}` : "";
+
+        // تحديث سجل مارك
+        let m = `LDR 00000nam a2200000 u 4500\n`;
+        m += `${document.getElementById('cType').value} ## $a ${get('cVal')}\n`;
+        if(get('m100')) m += `100 1# $a ${get('m100')}\n`;
+        m += `245 10 $a ${get('m245a')}`;
+        if(get('m245b')) m += ` : $b ${get('m245b')}`;
+        if(get('m245c')) m += ` / $c ${get('m245c')}`;
+        m += `\n`;
+        if(get('m250')) m += `250 ## $a ${get('m250')}\n`;
+        if(get('m260')) m += `260 ## $a ${get('m260')}\n`;
+        if(get('m300')) m += `300 ## $a ${get('m300')}\n`;
+        if(get('m490')) m += `490 0# $a ${get('m490')}\n`;
+        if(get('m500')) m += `500 ## $a ${get('m500')}\n`;
+        if(get('m650')) m += `650 #4 $a ${get('m650')}\n`;
+        
+        document.getElementById('marcView').innerText = m;
+    }
+
+    function exportTxt() {
+        const blob = new Blob([document.getElementById('marcView').innerText], {type: 'text/plain'});
+        const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'marc_record.txt'; a.click();
+    }
+
+    function exportXls() {
+        const get = id => document.getElementById(id).value;
+        const row = [{ "المؤلف": get('m100'), "العنوان": get('m245a'), "التصنيف": get('cVal'), "الناشر": get('m260') }];
+        const ws = XLSX.utils.json_to_sheet(row);
+        const wb = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(wb, ws, "Catalog");
+        XLSX.writeFile(wb, "Library_Record.xlsx");
+    }
+</script>
+
+</body>
+</html>
