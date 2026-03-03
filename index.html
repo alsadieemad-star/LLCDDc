@@ -2,220 +2,353 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <title>نظام الفهرسة المتطور - عماد كاظم السعدي</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>نظام السعدي للفهرسة الأكاديمية</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     <style>
-        :root { --primary: #2c3e50; --accent: #27ae60; --gray: #f4f7f6; }
-        body { font-family: 'Segoe UI', Tahoma, sans-serif; background: var(--gray); margin: 0; padding: 20px; padding-bottom: 80px; }
-        .container { max-width: 1150px; margin: auto; background: #fff; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); overflow: hidden; }
-        .header { background: var(--primary); color: white; padding: 20px; text-align: center; border-bottom: 4px solid var(--accent); }
-        .nav { display: flex; background: #eee; border-bottom: 1px solid #ddd; }
-        .nav button { flex: 1; padding: 15px; border: none; cursor: pointer; font-weight: bold; font-size: 16px; }
-        .nav button.active { background: white; color: var(--accent); border-bottom: 3px solid var(--accent); }
-        
-        .content { padding: 30px; }
-        .page { display: none; }
-        .active { display: block; }
-        
-        /* تقسيم الحقول */
-        .grid-form { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; background: #fafafa; padding: 20px; border-radius: 8px; border: 1px solid #eee; }
-        label { display: block; margin-bottom: 5px; font-weight: bold; color: var(--primary); font-size: 13px; }
-        input, select, textarea { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
-        .full-width { grid-column: span 2; }
-
-        /* منطقة المعاينة */
-        .preview-section { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 30px; }
-        .preview-box { border: 1px solid #ddd; border-radius: 8px; padding: 15px; background: #fff; }
-        .preview-title { font-weight: bold; margin-bottom: 10px; color: var(--accent); border-bottom: 1px solid #eee; padding-bottom: 5px; }
-
-        /* البطاقة التقليدية 3*5 */
-        .classic-card { 
-            width: 100%; min-height: 250px; border: 1px solid #999; padding: 20px; 
-            font-family: 'Times New Roman', Times, serif; font-size: 14px; line-height: 1.4; position: relative; background: #fff;
+        :root {
+            --primary-color: #1a2a6c;
+            --secondary-color: #b21f1f;
+            --accent-color: #27ae60;
+            --bg-color: #f8f9fa;
+            --card-bg: #ffffff;
+            --text-main: #2d3436;
         }
-        .card-class { position: absolute; top: 20px; right: 20px; font-weight: bold; width: 60px; }
-        .card-body { margin-right: 80px; text-align: justify; }
-        .hanging-indent { padding-right: 20px; text-indent: -20px; }
 
-        /* سجل مارك */
-        .marc-view { font-family: monospace; background: #2d3436; color: #00d2d3; padding: 15px; border-radius: 5px; direction: ltr; text-align: left; overflow-x: auto; }
+        body {
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-color);
+            margin: 0;
+            padding: 0;
+            color: var(--text-main);
+            line-height: 1.6;
+        }
 
-        .btn-group { display: flex; gap: 10px; margin-top: 20px; }
-        button.btn { padding: 12px; border: none; border-radius: 5px; color: white; cursor: pointer; font-weight: bold; flex: 1; transition: 0.3s; }
-        .btn-save { background: var(--accent); }
-        .btn-print { background: #576574; }
-        .btn-excel { background: #1d6f42; }
+        /* الهيدر الأكاديمي */
+        header {
+            background: linear-gradient(135deg, var(--primary-color), #2a4858);
+            color: white;
+            padding: 2rem 1rem;
+            text-align: center;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
 
-        footer { position: fixed; bottom: 0; left: 0; width: 100%; background: var(--primary); color: white; text-align: center; padding: 12px 0; font-size: 14px; z-index: 1000; }
+        header h1 { margin: 0; font-size: 1.8rem; letter-spacing: 1px; }
+        header p { margin: 5px 0 0; opacity: 0.9; font-weight: 300; }
+
+        .container {
+            max-width: 1200px;
+            margin: -30px auto 0;
+            padding: 0 15px 100px;
+        }
+
+        /* نظام التبويب للموبايل */
+        .nav-tabs {
+            display: flex;
+            background: white;
+            border-radius: 10px 10px 0 0;
+            overflow: hidden;
+            box-shadow: 0 -2px 10px rgba(0,0,0,0.05);
+        }
+
+        .nav-tabs button {
+            flex: 1;
+            padding: 15px;
+            border: none;
+            background: #eee;
+            cursor: pointer;
+            font-weight: bold;
+            transition: 0.3s;
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .nav-tabs button.active {
+            background: white;
+            color: var(--primary-color);
+            border-bottom: 4px solid var(--secondary-color);
+        }
+
+        .main-card {
+            background: white;
+            padding: 20px;
+            border-radius: 0 0 10px 10px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+        }
+
+        /* تنسيق المدخلات */
+        .section-title {
+            border-right: 4px solid var(--secondary-color);
+            padding-right: 10px;
+            margin: 20px 0;
+            color: var(--primary-color);
+            font-size: 1.2rem;
+        }
+
+        .grid-inputs {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+        }
+
+        .input-box label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            color: #555;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border 0.3s;
+        }
+
+        input:focus { border-color: var(--primary-color); outline: none; }
+
+        /* المعاينة */
+        .preview-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .preview-pane {
+            border: 1px solid #eee;
+            border-radius: 12px;
+            padding: 15px;
+            background: #fff;
+        }
+
+        .classic-card {
+            width: 100%;
+            min-height: 250px;
+            border: 1px solid #ccc;
+            padding: 1.5rem;
+            font-family: 'Times New Roman', serif;
+            position: relative;
+            background: #fff;
+            box-sizing: border-box;
+        }
+
+        .call-number { position: absolute; top: 1.5rem; right: 1.5rem; font-weight: bold; line-height: 1; }
+        .card-main-content { margin-right: 70px; text-align: justify; }
+
+        .marc-code {
+            background: #1e1e1e;
+            color: #9cdcfe;
+            padding: 15px;
+            border-radius: 8px;
+            direction: ltr;
+            text-align: left;
+            font-family: 'Consolas', monospace;
+            font-size: 0.85rem;
+            overflow-x: auto;
+            white-space: pre-wrap;
+        }
+
+        /* الأزرار */
+        .action-bar {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 10px;
+            margin-top: 25px;
+        }
+
+        .btn {
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .btn-p { background: var(--primary-color); }
+        .btn-s { background: var(--accent-color); }
+        .btn-d { background: var(--secondary-color); }
+
+        footer {
+            background: #1a2a6c;
+            color: white;
+            text-align: center;
+            padding: 15px;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            font-size: 0.9rem;
+            box-shadow: 0 -2px 10px rgba(0,0,0,0.2);
+        }
+
+        @media (max-width: 600px) {
+            header { padding: 1rem; }
+            header h1 { font-size: 1.4rem; }
+            .grid-inputs { grid-template-columns: 1fr; }
+            .classic-card { font-size: 12px; }
+        }
 
         @media print {
-            body * { visibility: hidden; }
-            .classic-card, .classic-card * { visibility: visible; }
-            .classic-card { position: absolute; left: 0; top: 0; width: 5in; height: 3in; border: none; }
-            footer { display: none; }
+            .nav-tabs, .action-bar, .grid-inputs, header, footer { display: none !important; }
+            .classic-card { border: none !important; width: 5in; height: 3in; }
         }
     </style>
 </head>
 <body>
 
+<header>
+    <h1>نظام السعدي للفهرسة وإدارة المراجع</h1>
+    <p>مختبر البحث الأكاديمي الرقمي</p>
+</header>
+
 <div class="container">
-    <div class="header">
-        <h1>نظام الفهرسة الأكاديمي المتكامل</h1>
-        <p>إشراف وتطوير: عماد كاظم السعدي</p>
+    <div class="nav-tabs">
+        <button id="btnTab1" class="active" onclick="switchTab('tabSearch', 'btnTab1')">🔍 محرك البحث</button>
+        <button id="btnTab2" onclick="switchTab('tabInput', 'btnTab2')">📝 مركز الفهرسة</button>
     </div>
 
-    <div class="nav">
-        <button id="t1" class="active" onclick="showP('searchP', 't1')">محرك البحث</button>
-        <button id="t2" onclick="showP('inputP', 't2')">مركز الفهرسة والبطاقات</button>
-    </div>
-
-    <div class="content">
-        <div id="searchP" class="page active">
-            <label>تحميل قاعدة البيانات (Excel):</label>
-            <input type="file" id="xlIn" accept=".xlsx, .xls" style="margin-bottom:20px;">
-            <input type="text" id="q" placeholder="ابحث في العناوين، المؤلفين، أو رؤوس الموضوعات...">
-            <div class="btn-group">
-                <button class="btn" style="background:var(--primary)" onclick="search('in')">يحتوي على</button>
-                <button class="btn" style="background:#2980b9" onclick="search('start')">يبدأ بـ</button>
-                <button class="btn" style="background:var(--danger)" onclick="location.reload()">تفريغ النتائج</button>
+    <div class="main-card">
+        <div id="tabSearch" class="page active">
+            <h3 class="section-title">البحث في المستودع الرقمي</h3>
+            <input type="file" id="excelUpload" accept=".xlsx, .xls" style="margin-bottom:15px;">
+            <input type="text" id="query" placeholder="ابحث بالكلمة المفتاحية...">
+            <div class="action-bar">
+                <button class="btn btn-p" onclick="processSearch('in')">يحتوي على</button>
+                <button class="btn btn-p" onclick="processSearch('start')" style="background:#2980b9">يبدأ بـ</button>
+                <button class="btn btn-d" onclick="location.reload()">تحديث النظام</button>
             </div>
-            <div id="res" style="margin-top:20px;"></div>
+            <div id="searchResults" style="margin-top:20px; overflow-x:auto;"></div>
         </div>
 
-        <div id="inputP" class="page">
-            <div class="grid-form">
-                <div class="input-group"><label>المؤلف (100):</label><input type="text" id="m100" oninput="updateV()"></div>
-                <div class="input-group"><label>العنوان الرئيسي (245$a):</label><input type="text" id="m245a" oninput="updateV()"></div>
-                <div class="input-group"><label>العنوان الفرعي (245$b):</label><input type="text" id="m245b" oninput="updateV()"></div>
-                <div class="input-group"><label>بيان المسؤولية (245$c):</label><input type="text" id="m245c" oninput="updateV()"></div>
-                <div class="input-group"><label>بيان الطبعة (250):</label><input type="text" id="m250" oninput="updateV()"></div>
-                <div class="input-group"><label>بيان الناشر (260):</label><input type="text" id="m260" oninput="updateV()"></div>
-                <div class="input-group"><label>الوصف المادي (300):</label><input type="text" id="m300" oninput="updateV()"></div>
-                <div class="input-group"><label>السلسلة (490):</label><input type="text" id="m490" oninput="updateV()"></div>
-                <div class="input-group">
-                    <label>نظام التصنيف:</label>
-                    <select id="cType" onchange="updateV()"><option value="082">ديوي</option><option value="050">الكونجرس</option></select>
-                    <input type="text" id="cVal" placeholder="رقم التصنيف..." oninput="updateV()">
+        <div id="tabInput" class="page" style="display:none;">
+            <h3 class="section-title">بيانات السجل الأكاديمي (MARC 21)</h3>
+            <div class="grid-inputs">
+                <div class="input-box"><label>المدخل الرئيسي / المؤلف (100):</label><input type="text" id="f100" oninput="liveView()"></div>
+                <div class="input-box"><label>العنوان الرئيسي (245$a):</label><input type="text" id="f245a" oninput="liveView()"></div>
+                <div class="input-box"><label>العنوان الفرعي (245$b):</label><input type="text" id="f245b" oninput="liveView()"></div>
+                <div class="input-box"><label>بيان المسؤولية (245$c):</label><input type="text" id="f245c" oninput="liveView()"></div>
+                <div class="input-box"><label>الطبعة (250):</label><input type="text" id="f250" oninput="liveView()"></div>
+                <div class="input-box"><label>الناشر وسنة النشر (260/264):</label><input type="text" id="f260" oninput="liveView()"></div>
+                <div class="input-box"><label>الوصف المادي (300):</label><input type="text" id="f300" oninput="liveView()"></div>
+                <div class="input-box"><label>نظام التصنيف ورقم الاستدعاء:</label>
+                    <select id="cType" style="margin-bottom:5px;" onchange="liveView()"><option value="082">ديوي العشري</option><option value="050">مكتبة الكونجرس</option></select>
+                    <input type="text" id="cVal" placeholder="رقم التصنيف + رقم المؤلف" oninput="liveView()">
                 </div>
-                <div class="input-group"><label>رؤوس الموضوعات (650):</label><input type="text" id="m650" oninput="updateV()"></div>
-                <div class="input-group full-width"><label>الملاحظات (500):</label><textarea id="m500" oninput="updateV()"></textarea></div>
+                <div class="input-group full-width"><label>رؤوس الموضوعات (650):</label><input type="text" id="f650" oninput="liveView()"></div>
+                <div class="input-group full-width"><label>الملاحظات (500):</label><textarea id="f500" oninput="liveView()"></textarea></div>
+                <div class="input-box" style="background:#fff3f3; padding:10px; border-radius:8px;"><label>بيانات التزويد (900):</label><input type="text" id="f900" placeholder="المصدر - الثمن - التاريخ" oninput="liveView()"></div>
             </div>
 
-            <div class="preview-section">
-                <div class="preview-box">
-                    <div class="preview-title">معاينة البطاقة (3×5 بوصة)</div>
-                    <div class="classic-card" id="cardView">
-                        <div class="card-class" id="p_class"></div>
-                        <div class="card-body">
-                            <div id="p_auth" style="font-weight:bold; margin-bottom:5px;"></div>
-                            <div class="hanging-indent" id="p_title_area"></div>
-                            <div id="p_phys" style="margin-top:5px;"></div>
-                            <div id="p_series" style="margin-top:5px;"></div>
-                            <div id="p_notes" style="margin-top:10px; font-size:12px;"></div>
-                            <div id="p_subj" style="margin-top:10px; font-size:12px;"></div>
+            <div class="preview-grid">
+                <div class="preview-pane">
+                    <div style="font-weight:bold; color:var(--primary-color); margin-bottom:10px;">📄 بطاقة الفهرسة التقليدية</div>
+                    <div class="classic-card" id="classicCard">
+                        <div class="call-number" id="v_call"></div>
+                        <div class="card-main-content">
+                            <div id="v_auth" style="font-weight:bold;"></div>
+                            <div id="v_tit_area" style="text-indent: -20px; padding-right: 20px;"></div>
+                            <div id="v_phys" style="margin-top:5px;"></div>
+                            <div id="v_notes" style="margin-top:10px; font-size:0.85rem; color:#444;"></div>
+                            <div id="v_subj" style="margin-top:10px; font-size:0.85rem;"></div>
                         </div>
                     </div>
                 </div>
-
-                <div class="preview-box">
-                    <div class="preview-title">معاينة سجل MARC 21</div>
-                    <div class="marc-view" id="marcView"></div>
+                <div class="preview-pane">
+                    <div style="font-weight:bold; color:var(--primary-color); margin-bottom:10px;">💻 سجل MARC 21 القياسي</div>
+                    <div class="marc-code" id="marcCode"></div>
                 </div>
             </div>
 
-            <div class="btn-group">
-                <button class="btn btn-save" onclick="exportTxt()">تصدير MARC (Txt)</button>
-                <button class="btn btn-excel" onclick="exportXls()">تصدير للسجل (Excel)</button>
-                <button class="btn btn-print" onclick="window.print()">طباعة البطاقة</button>
+            <div class="action-bar">
+                <button class="btn btn-s" onclick="exportExcel()">📥 تصدير Excel</button>
+                <button class="btn btn-p" onclick="window.print()">🖨️ طباعة البطاقة</button>
+                <button class="btn btn-d" onclick="exportTxt()">💾 تصدير MARC</button>
             </div>
         </div>
     </div>
 </div>
 
-<footer>جميع الحقوق محفوظة © عماد كاظم السعدي 2026</footer>
+<footer>جميع الحقوق محفوظة للمؤلف © عماد كاظم السعدي 2026</footer>
 
 <script>
     let db = [];
 
-    function showP(pId, tId) {
-        document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-        document.querySelectorAll('.nav button').forEach(b => b.classList.remove('active'));
-        document.getElementById(pId).classList.add('active');
-        document.getElementById(tId).classList.add('active');
+    function switchTab(tabId, btnId) {
+        document.querySelectorAll('.page').forEach(p => p.style.display = 'none');
+        document.querySelectorAll('.nav-tabs button').forEach(b => b.classList.remove('active'));
+        document.getElementById(tabId).style.display = 'block';
+        document.getElementById(btnId).classList.add('active');
     }
 
-    // معالجة ملف الإكسل
-    document.getElementById('xlIn').addEventListener('change', function(e) {
+    document.getElementById('excelUpload').addEventListener('change', function(e) {
         const reader = new FileReader();
         reader.onload = (ev) => {
             const wb = XLSX.read(ev.target.result, {type: 'array'});
             db = XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]]);
-            alert("تم تحميل البيانات بنجاح.");
+            alert("تم ربط قاعدة البيانات بنجاح!");
         };
         reader.readAsArrayBuffer(e.target.files[0]);
     });
 
-    function search(mode) {
-        const txt = document.getElementById('q').value.toLowerCase();
-        const filtered = db.filter(r => Object.values(r).some(v => 
-            mode === 'in' ? String(v).toLowerCase().includes(txt) : String(v).toLowerCase().startsWith(txt)
+    function processSearch(mode) {
+        const val = document.getElementById('query').value.toLowerCase();
+        if(!db.length) return alert("يرجى تحميل الملف أولاً");
+        const results = db.filter(r => Object.values(r).some(v => 
+            mode === 'in' ? String(v).toLowerCase().includes(val) : String(v).toLowerCase().startsWith(val)
         ));
-        renderTable(filtered);
+        renderTable(results);
     }
 
     function renderTable(data) {
-        if(!data.length) return document.getElementById('res').innerHTML = "لا توجد نتائج.";
-        let h = '<table border="1" style="width:100%; border-collapse:collapse;"><tr>';
-        Object.keys(data[0]).forEach(k => h += `<th style="padding:8px; background:#eee;">${k}</th>`);
-        data.forEach(r => { h += '<tr>'; Object.values(r).forEach(v => h += `<td style="padding:8px; text-align:center;">${v}</td>`); h += '</tr>'; });
-        document.getElementById('res').innerHTML = h + '</table>';
+        let h = '<table border="1" style="width:100%; border-collapse:collapse; background:white;"><tr>' + 
+            Object.keys(db[0]).map(k => `<th style="padding:10px; background:#f1f1f1;">${k}</th>`).join('') + '</tr>';
+        data.forEach(r => h += '<tr>' + Object.values(r).map(v => `<td style="padding:8px; text-align:center;">${v}</td>`).join('') + '</tr>');
+        document.getElementById('searchResults').innerHTML = h + '</table>';
     }
 
-    // تحديث المعاينة الحية
-    function updateV() {
+    function liveView() {
         const get = id => document.getElementById(id).value;
-        
-        // تحديث البطاقة التقليدية
-        document.getElementById('p_class').innerText = get('cVal');
-        document.getElementById('p_auth').innerText = get('m100');
-        document.getElementById('p_title_area').innerText = `${get('m245a')} : ${get('m245b')} / ${get('m245c')}. -- ط ${get('m250')}. -- ${get('m260')}.`;
-        document.getElementById('p_phys').innerText = get('m300');
-        document.getElementById('p_series').innerText = get('m490') ? `(${get('m490')})` : "";
-        document.getElementById('p_notes').innerText = get('m500');
-        document.getElementById('p_subj').innerText = get('m650') ? `1. ${get('m650')}` : "";
+        // تحديث البطاقة
+        document.getElementById('v_call').innerText = get('cVal');
+        document.getElementById('v_auth').innerText = get('f100');
+        document.getElementById('v_tit_area').innerText = `${get('f245a')} : ${get('f245b')} / ${get('f245c')}. -- ط ${get('f250')}. -- ${get('f260')}.`;
+        document.getElementById('v_phys').innerText = get('m300');
+        document.getElementById('v_notes').innerText = get('f500');
+        document.getElementById('v_subj').innerText = get('f650') ? `1. ${get('f650')}` : "";
 
-        // تحديث سجل مارك
+        // تحديث مارك
         let m = `LDR 00000nam a2200000 u 4500\n`;
         m += `${document.getElementById('cType').value} ## $a ${get('cVal')}\n`;
-        if(get('m100')) m += `100 1# $a ${get('m100')}\n`;
-        m += `245 10 $a ${get('m245a')}`;
-        if(get('m245b')) m += ` : $b ${get('m245b')}`;
-        if(get('m245c')) m += ` / $c ${get('m245c')}`;
-        m += `\n`;
-        if(get('m250')) m += `250 ## $a ${get('m250')}\n`;
-        if(get('m260')) m += `260 ## $a ${get('m260')}\n`;
-        if(get('m300')) m += `300 ## $a ${get('m300')}\n`;
-        if(get('m490')) m += `490 0# $a ${get('m490')}\n`;
-        if(get('m500')) m += `500 ## $a ${get('m500')}\n`;
-        if(get('m650')) m += `650 #4 $a ${get('m650')}\n`;
-        
-        document.getElementById('marcView').innerText = m;
+        if(get('f100')) m += `100 1# $a ${get('f100')}\n`;
+        m += `245 10 $a ${get('f245a')} $b ${get('f245b')} $c ${get('f245c')}\n`;
+        if(get('f250')) m += `250 ## $a ${get('f250')}\n`;
+        if(get('f260')) m += `260 ## $a ${get('f260')}\n`;
+        if(get('f900')) m += `900 ## $a ${get('f900')}\n`;
+        document.getElementById('marcCode').innerText = m;
     }
 
     function exportTxt() {
-        const blob = new Blob([document.getElementById('marcView').innerText], {type: 'text/plain'});
-        const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'marc_record.txt'; a.click();
+        const blob = new Blob([document.getElementById('marcCode').innerText], {type: 'text/plain'});
+        const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'Al_Saadi_MARC.txt'; a.click();
     }
 
-    function exportXls() {
+    function exportExcel() {
         const get = id => document.getElementById(id).value;
-        const row = [{ "المؤلف": get('m100'), "العنوان": get('m245a'), "التصنيف": get('cVal'), "الناشر": get('m260') }];
+        const row = [{ "المؤلف": get('f100'), "العنوان": get('f245a'), "التصنيف": get('cVal'), "بيانات التزويد": get('f900') }];
         const ws = XLSX.utils.json_to_sheet(row);
         const wb = XLSX.utils.book_new();
-        XLSX.utils.book_append_sheet(wb, ws, "Catalog");
-        XLSX.writeFile(wb, "Library_Record.xlsx");
+        XLSX.utils.book_append_sheet(wb, ws, "Database");
+        XLSX.writeFile(wb, "Acquisition_Record.xlsx");
     }
 </script>
-
 </body>
 </html>
