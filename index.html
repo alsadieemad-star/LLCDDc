@@ -2,183 +2,87 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <title>نظام الفهرسة الأكاديمي - عماد كاظم السعدي</title>
+    <title>نظام الفهرسة المتطور - عماد كاظم السعدي</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     <style>
-        :root { --primary: #2c3e50; --accent: #27ae60; --blue: #2980b9; --danger: #e74c3c; }
-        body { font-family: 'Segoe UI', Tahoma, sans-serif; background: #f4f7f6; margin: 0; padding: 20px; padding-bottom: 60px; }
-        .container { max-width: 1100px; margin: auto; background: #fff; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); overflow: hidden; }
+        :root { --primary: #2c3e50; --accent: #27ae60; --gray: #f4f7f6; }
+        body { font-family: 'Segoe UI', Tahoma, sans-serif; background: var(--gray); margin: 0; padding: 20px; padding-bottom: 80px; }
+        .container { max-width: 1150px; margin: auto; background: #fff; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); overflow: hidden; }
         .header { background: var(--primary); color: white; padding: 20px; text-align: center; border-bottom: 4px solid var(--accent); }
-        .nav { display: flex; background: #f8f9fa; border-bottom: 1px solid #ddd; }
-        .nav button { flex: 1; padding: 15px; border: none; cursor: pointer; font-size: 16px; font-weight: bold; transition: 0.3s; }
+        .nav { display: flex; background: #eee; border-bottom: 1px solid #ddd; }
+        .nav button { flex: 1; padding: 15px; border: none; cursor: pointer; font-weight: bold; font-size: 16px; }
         .nav button.active { background: white; color: var(--accent); border-bottom: 3px solid var(--accent); }
+        
         .content { padding: 30px; }
         .page { display: none; }
         .active { display: block; }
-        .grid-form { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
-        input, select, textarea { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box; }
-        .btns { display: flex; gap: 10px; margin-top: 20px; flex-wrap: wrap; }
-        button.action { padding: 12px 20px; border: none; border-radius: 5px; color: white; cursor: pointer; font-weight: bold; flex: 1; min-width: 150px; }
-        .btn-search { background: var(--primary); }
-        .btn-excel { background: #1d6f42; }
-        .btn-print { background: #576574; }
-        .btn-export { background: var(--accent); }
         
-        /* تنسيق بطاقة الطباعة 3*5 */
-        #printCard { 
-            display: none; width: 5in; height: 3in; border: 1px solid #000; 
-            padding: 20px; margin: 20px auto; background: #fff; color: #000;
-            font-family: 'Times New Roman', serif; position: relative; line-height: 1.2;
+        /* تقسيم الحقول */
+        .grid-form { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; background: #fafafa; padding: 20px; border-radius: 8px; border: 1px solid #eee; }
+        label { display: block; margin-bottom: 5px; font-weight: bold; color: var(--primary); font-size: 13px; }
+        input, select, textarea { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
+        .full-width { grid-column: span 2; }
+
+        /* منطقة المعاينة */
+        .preview-section { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 30px; }
+        .preview-box { border: 1px solid #ddd; border-radius: 8px; padding: 15px; background: #fff; }
+        .preview-title { font-weight: bold; margin-bottom: 10px; color: var(--accent); border-bottom: 1px solid #eee; padding-bottom: 5px; }
+
+        /* البطاقة التقليدية 3*5 */
+        .classic-card { 
+            width: 100%; min-height: 250px; border: 1px solid #999; padding: 20px; 
+            font-family: 'Times New Roman', Times, serif; font-size: 14px; line-height: 1.4; position: relative; background: #fff;
         }
-        .class-num { position: absolute; top: 20px; right: 20px; width: 80px; text-align: left; font-weight: bold; }
-        .card-content { margin-right: 100px; text-align: right; }
-        
-        footer { position: fixed; bottom: 0; left: 0; width: 100%; background: var(--primary); color: white; text-align: center; padding: 10px 0; font-weight: bold; }
-        
+        .card-class { position: absolute; top: 20px; right: 20px; font-weight: bold; width: 60px; }
+        .card-body { margin-right: 80px; text-align: justify; }
+        .hanging-indent { padding-right: 20px; text-indent: -20px; }
+
+        /* سجل مارك */
+        .marc-view { font-family: monospace; background: #2d3436; color: #00d2d3; padding: 15px; border-radius: 5px; direction: ltr; text-align: left; overflow-x: auto; }
+
+        .btn-group { display: flex; gap: 10px; margin-top: 20px; }
+        button.btn { padding: 12px; border: none; border-radius: 5px; color: white; cursor: pointer; font-weight: bold; flex: 1; transition: 0.3s; }
+        .btn-save { background: var(--accent); }
+        .btn-print { background: #576574; }
+        .btn-excel { background: #1d6f42; }
+
+        footer { position: fixed; bottom: 0; left: 0; width: 100%; background: var(--primary); color: white; text-align: center; padding: 12px 0; font-size: 14px; z-index: 1000; }
+
         @media print {
             body * { visibility: hidden; }
-            #printCard, #printCard * { visibility: visible; }
-            #printCard { position: absolute; left: 0; top: 0; display: block; border: none; }
+            .classic-card, .classic-card * { visibility: visible; }
+            .classic-card { position: absolute; left: 0; top: 0; width: 5in; height: 3in; border: none; }
+            footer { display: none; }
         }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <div class="header"><h1>نظام الفهرسة الأكاديمي الذكي</h1></div>
+    <div class="header">
+        <h1>نظام الفهرسة الأكاديمي المتكامل</h1>
+        <p>إشراف وتطوير: عماد كاظم السعدي</p>
+    </div>
+
     <div class="nav">
-        <button id="tab1" class="active" onclick="openPage('searchPage', 'tab1')">البحث الذكي</button>
-        <button id="tab2" onclick="openPage('inputPage', 'tab2')">إدخال السجلات وتوليد MARC</button>
+        <button id="t1" class="active" onclick="showP('searchP', 't1')">محرك البحث</button>
+        <button id="t2" onclick="showP('inputP', 't2')">مركز الفهرسة والبطاقات</button>
     </div>
 
     <div class="content">
-        <div id="searchPage" class="page active">
-            <label>ارفع ملف الإكسل المرجعي:</label>
-            <input type="file" id="fileUploader" accept=".xlsx, .xls" style="margin-bottom:20px;">
-            <input type="text" id="searchKeyword" placeholder="بحث...">
-            <div class="btns">
-                <button class="action btn-search" onclick="doSearch('contains')">يحتوي على</button>
-                <button class="action btn-search" style="background:#2980b9" onclick="doSearch('starts')">يبدأ بـ</button>
-                <button class="action" style="background:var(--danger)" onclick="location.reload()">مسح النتائج والعودة</button>
+        <div id="searchP" class="page active">
+            <label>تحميل قاعدة البيانات (Excel):</label>
+            <input type="file" id="xlIn" accept=".xlsx, .xls" style="margin-bottom:20px;">
+            <input type="text" id="q" placeholder="ابحث في العناوين، المؤلفين، أو رؤوس الموضوعات...">
+            <div class="btn-group">
+                <button class="btn" style="background:var(--primary)" onclick="search('in')">يحتوي على</button>
+                <button class="btn" style="background:#2980b9" onclick="search('start')">يبدأ بـ</button>
+                <button class="btn" style="background:var(--danger)" onclick="location.reload()">تفريغ النتائج</button>
             </div>
-            <div id="resultsArea" style="margin-top:20px; overflow-x:auto;"></div>
+            <div id="res" style="margin-top:20px;"></div>
         </div>
 
-        <div id="inputPage" class="page">
-            <div class="grid-form" id="entryForm">
-                <div class="input-group"><label>المؤلف / المدخل الرئيسي:</label><input type="text" id="f100"></div>
-                <div class="input-group"><label>العنوان الرئيسي:</label><input type="text" id="f245a"></div>
-                <div class="input-group"><label>العنوان الفرعي:</label><input type="text" id="f245b"></div>
-                <div class="input-group"><label>بيان المسؤولية:</label><input type="text" id="f245c"></div>
-                <div class="input-group"><label>بيان الطبعة:</label><input type="text" id="f250"></div>
-                <div class="input-group"><label>بيان الناشر:</label><input type="text" id="f260"></div>
-                <div class="input-group"><label>الوصف المادي:</label><input type="text" id="f300"></div>
-                <div class="input-group"><label>السلسلة:</label><input type="text" id="f490"></div>
-                <div class="input-group"><label>رقم التصنيف:</label>
-                    <select id="classType" style="width:30%; display:inline;">
-                        <option value="DDC">ديوي</option>
-                        <option value="LCC">الكونجرس</option>
-                    </select>
-                    <input type="text" id="classValue" style="width:68%; display:inline;" placeholder="الرقم...">
-                </div>
-                <div class="input-group"><label>المداخل الإضافية:</label><input type="text" id="f700"></div>
-                <div class="input-group full-width"><label>الموضوعات:</label><input type="text" id="f650"></div>
-                <div class="input-group full-width"><label>الملاحظات:</label><textarea id="f500"></textarea></div>
-            </div>
-
-            <div class="btns">
-                <button class="action btn-export" onclick="makeAdvancedMarc()">تصدير MARC (Text)</button>
-                <button class="action btn-excel" onclick="exportToExcel()">تصدير إلى Excel</button>
-                <button class="action btn-print" onclick="preparePrint()">معاينة وطباعة البطاقة</button>
-            </div>
-
-            <div id="printCard">
-                <div class="class-num" id="pClass"></div>
-                <div class="card-content">
-                    <div id="pAuthor" style="font-weight:bold; margin-bottom:5px;"></div>
-                    <div id="pTitleMain"></div>
-                    <div id="pPub" style="margin-top:10px;"></div>
-                    <div id="pPhys" style="margin-top:5px;"></div>
-                    <div id="pNotes" style="margin-top:10px; font-size: 12px;"></div>
-                    <div id="pSubjects" style="margin-top:10px; font-style: italic;"></div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-<footer>جميع الحقوق محفوظة © عماد كاظم السعدي 2026</footer>
-
-<script>
-    let masterData = [];
-
-    function openPage(pageId, tabId) {
-        document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-        document.querySelectorAll('.nav button').forEach(b => b.classList.remove('active'));
-        document.getElementById(pageId).classList.add('active');
-        document.getElementById(tabId).classList.add('active');
-    }
-
-    // قراءة الملف
-    document.getElementById('fileUploader').addEventListener('change', function(e) {
-        const file = e.target.files[0];
-        const reader = new FileReader();
-        reader.onload = function(event) {
-            const data = new Uint8Array(event.target.result);
-            const wb = XLSX.read(data, {type: 'array'});
-            masterData = XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]]);
-            alert("تم تحميل ملف الإكسل بنجاح.");
-        };
-        reader.readAsArrayBuffer(file);
-    });
-
-    // البحث
-    function doSearch(type) {
-        const word = document.getElementById('searchKeyword').value.toLowerCase();
-        const res = masterData.filter(row => Object.values(row).some(v => 
-            type==='contains' ? String(v).toLowerCase().includes(word) : String(v).toLowerCase().startsWith(word)
-        ));
-        let html = '<table border="1"><tr>' + Object.keys(masterData[0] || {}).map(k=>`<th>${k}</th>`).join('') + '</tr>';
-        res.forEach(r => html += '<tr>' + Object.values(r).map(v=>`<td>${v}</td>`).join('') + '</tr>');
-        document.getElementById('resultsArea').innerHTML = html + '</table>';
-    }
-
-    // تصدير مارك
-    function makeAdvancedMarc() {
-        const val = id => document.getElementById(id).value;
-        let m = `100 1# $a ${val('f100')}\n245 10 $a ${val('f245a')} : $b ${val('f245b')} / $c ${val('f245c')}\n260 ## $a ${val('f260')}\n300 ## $a ${val('f300')}\n500 ## $a ${val('f500')}`;
-        const blob = new Blob([m], {type: 'text/plain'});
-        const a = document.createElement('a');
-        a.href = URL.createObjectURL(blob); a.download = 'marc.txt'; a.click();
-    }
-
-    // تصدير إكسل للبطاقة الحالية
-    function exportToExcel() {
-        const val = id => document.getElementById(id).value;
-        const data = [{
-            "المؤلف": val('f100'), "العنوان": val('f245a'), "الناشر": val('f260'), "رقم التصنيف": val('classValue')
-        }];
-        const ws = XLSX.utils.json_to_sheet(data);
-        const wb = XLSX.utils.book_new();
-        XLSX.utils.book_append_sheet(wb, ws, "Card");
-        XLSX.writeFile(wb, "New_Entry.xlsx");
-    }
-
-    // تحضير الطباعة
-    function preparePrint() {
-        const val = id => document.getElementById(id).value;
-        document.getElementById('pClass').innerText = val('classValue');
-        document.getElementById('pAuthor').innerText = val('f100');
-        document.getElementById('pTitleMain').innerText = `${val('f245a')} : ${val('f245b')} / ${val('f245c')}. -- ط ${val('f250')}`;
-        document.getElementById('pPub').innerText = val('f260');
-        document.getElementById('pPhys').innerText = val('f300');
-        document.getElementById('pNotes').innerText = "ملاحظات: " + val('f500');
-        document.getElementById('pSubjects').innerText = "1. " + val('f650');
-        
-        document.getElementById('printCard').style.display = 'block';
-        window.print();
-    }
-</script>
-
-</body>
-</html>
+        <div id="inputP" class="page">
+            <div class="grid-form">
+                <div class="input-group"><label>المؤلف (100):</label><input type="text" id="m100" oninput="updateV()"></div>
+                <div class="input-group"><label>العنوان الرئيسي (245$a):</label><input type="text" id="m245a" oninput="updateV()">
