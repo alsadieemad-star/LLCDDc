@@ -3,35 +3,34 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>منصة السعدي الاحترافية للفهرسة والاستناد</title>
+    <title>منصة السعدي للفهرسة والاستناد - النسخة النهائية</title>
     <link rel="icon" type="image/png" href="https://img.icons8.com/fluency/96/library.png">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     <style>
         :root { --primary: #1a2a6c; --secondary: #b21f1f; --accent: #27ae60; --bg: #f4f7f6; --code-bg: #282c34; }
-        body { font-family: 'Segoe UI', Tahoma, sans-serif; background: var(--bg); margin: 0; padding-bottom: 80px; color: #333; }
+        body { font-family: 'Segoe UI', Tahoma, sans-serif; background: var(--bg); margin: 0; padding-bottom: 80px; }
         header { background: linear-gradient(135deg, var(--primary), #2a4858); color: white; padding: 20px; text-align: center; box-shadow: 0 4px 15px rgba(0,0,0,0.2); }
         .nav-tabs { display: flex; background: #fff; border-bottom: 3px solid var(--secondary); position: sticky; top: 0; z-index: 1000; overflow-x: auto; }
         .nav-tabs button { flex: 1; padding: 18px; border: none; background: none; font-weight: bold; cursor: pointer; color: #555; transition: 0.3s; white-space: nowrap; }
         .nav-tabs button.active { color: var(--primary); background: #f9f9f9; border-bottom: 5px solid var(--primary); }
-        .container { max-width: 1300px; margin: 25px auto; padding: 0 20px; }
+        .container { max-width: 1350px; margin: 25px auto; padding: 0 20px; }
         .page { display: none; }
         .page.active { display: block; }
         .card { background: white; border-radius: 15px; box-shadow: 0 5px 25px rgba(0,0,0,0.1); padding: 25px; margin-bottom: 25px; border-top: 5px solid var(--primary); }
         h3 { border-right: 5px solid var(--accent); padding-right: 15px; color: var(--primary); margin-bottom: 20px; }
-        .grid-form { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 15px; }
-        .input-group { display: flex; flex-direction: column; margin-bottom: 10px; }
-        label { font-weight: bold; margin-bottom: 5px; font-size: 0.85rem; color: #444; }
+        .grid-form { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 15px; }
+        .input-group { display: flex; flex-direction: column; margin-bottom: 10px; border: 1px solid #eee; padding: 10px; border-radius: 8px; background: #fafafa; }
+        label { font-weight: bold; margin-bottom: 5px; font-size: 0.85rem; color: var(--primary); }
         input, select, textarea { padding: 10px; border: 1px solid #ccc; border-radius: 8px; font-size: 0.95rem; width: 100%; box-sizing: border-box; }
-        .preview-area { display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 20px; margin-top: 25px; }
+        .preview-area { display: grid; grid-template-columns: repeat(auto-fit, minmax(450px, 1fr)); gap: 20px; margin-top: 25px; }
         .view-box { background: #fff; border: 1px solid #ddd; border-radius: 12px; padding: 20px; }
-        .classic-card { width: 100%; min-height: 250px; border: 1px solid #333; padding: 25px; font-family: 'Times New Roman', serif; position: relative; line-height: 1.4; font-size: 1.05rem; }
+        .classic-card { width: 100%; min-height: 280px; border: 1px solid #333; padding: 25px; font-family: 'Times New Roman', serif; position: relative; line-height: 1.5; font-size: 1.1rem; }
         .card-class { position: absolute; top: 25px; right: 25px; font-weight: bold; }
         .card-body { margin-right: 90px; text-align: justify; }
         .marc-view { background: var(--code-bg); color: #9cdcfe; padding: 15px; border-radius: 10px; direction: ltr; text-align: left; font-family: 'Consolas', monospace; white-space: pre-wrap; font-size: 0.9rem; }
         .tag { color: #e06c75; font-weight: bold; }
         .sub { color: #d19a66; }
-        .btn-group { display: flex; gap: 10px; margin-top: 20px; }
-        .btn { flex: 1; padding: 12px; border: none; border-radius: 8px; color: white; font-weight: bold; cursor: pointer; }
+        .btn { padding: 12px; border: none; border-radius: 8px; color: white; font-weight: bold; cursor: pointer; flex: 1; }
         footer { background: var(--primary); color: white; text-align: center; padding: 15px; position: fixed; bottom: 0; width: 100%; }
         @media print { .no-print { display: none !important; } .classic-card { border: none !important; } }
     </style>
@@ -39,129 +38,139 @@
 <body>
 
 <header>
-    <h1>نظام السعدي للفهرسة والاستناد - النسخة المطورة</h1>
-    <p>بإشراف الأستاذ عماد كاظم السعدي</p>
+    <h1>نظام السعدي للفهرسة والاستناد - النسخة الأكاديمية الشاملة</h1>
+    <p>جميع الحقوق محفوظة للأستاذ عماد كاظم السعدي © 2026</p>
 </header>
 
 <nav class="nav-tabs no-print">
-    <button id="t1" class="active" onclick="openTab('searchPage', 't1')">🔍 البحث والاستناد</button>
-    <button id="t2" onclick="openTab('booksPage', 't2')">📚 فهرسة الكتب</button>
-    <button id="t3" onclick="openTab('manusPage', 't3')">📜 فهرسة المخطوطات</button>
+    <button id="t1" class="active" onclick="showTab('searchPage', 't1')">🔍 البحث والاستناد</button>
+    <button id="t2" onclick="showTab('booksPage', 't2')">📚 فهرسة الكتب (MARC)</button>
+    <button id="t3" onclick="showTab('manusPage', 't3')">📜 فهرسة المخطوطات</button>
 </nav>
 
 <div class="container">
 
     <div id="searchPage" class="page active">
         <div class="card">
-            <h3>الملف الاستنادي (Excel)</h3>
-            <input type="file" id="xlIn" accept=".xlsx, .xls" style="margin-bottom:15px;">
-            <div style="display:flex; gap:10px;">
-                <input type="text" id="sq" placeholder="ابحث هنا...">
-                <button class="btn" style="background:var(--primary)" onclick="doSearch('in')">يحتوي</button>
-                <button class="btn" style="background:var(--secondary)" onclick="clearResults()">تفريغ النتائج</button>
+            <h3>الملف الاستنادي المرجعي (Excel)</h3>
+            <input type="file" id="excelFile" accept=".xlsx, .xls" style="margin-bottom:15px;">
+            <div style="display:flex; gap:10px; flex-wrap: wrap;">
+                <input type="text" id="searchQuery" style="flex:2;" placeholder="ابحث في الموضوعات، المؤلفين، أو التصنيف...">
+                <button class="btn" style="background:var(--primary)" onclick="runSearch('in')">يحتوي على</button>
+                <button class="btn" style="background:var(--secondary)" onclick="clearSearchRes()">تفريغ البحث</button>
             </div>
-            <div id="res" style="margin-top:15px; overflow-x:auto;"></div>
+            <div id="searchTableArea" style="margin-top:20px; overflow-x:auto; max-height:400px;"></div>
         </div>
     </div>
 
     <div id="booksPage" class="page">
         <div class="card no-print">
-            <h3>بيانات الكتاب والمداخل الاستنادية</h3>
+            <h3>بيانات الفهرسة المتقدمة (الكتب)</h3>
             <div class="grid-form">
-                <div class="input-group"><label>المدخل الرئيسي:</label>
-                    <select id="bTag1" onchange="upB()"><option value="100">100 - اسم شخص</option><option value="110">110 - هيئة</option><option value="111">111 - مؤتمر</option><option value="130">130 - عنوان مقنن</option></select>
-                    <input type="text" id="bAuth" oninput="upB()">
+                <div class="input-group">
+                    <label>المدخل الرئيسي (100-130):</label>
+                    <select id="b1xxTag" onchange="syncB()"><option value="100">100 - اسم شخص</option><option value="110">110 - اسم هيئة</option><option value="111">111 - اسم ملتقى</option><option value="130">130 - عنوان مقنن</option></select>
+                    <input type="text" id="b1xxVal" placeholder="القيمة..." oninput="syncB()">
                 </div>
-                <div class="input-group"><label>العنوان الرئيسي (245):</label><input type="text" id="b245a" oninput="upB()"></div>
-                <div class="input-group"><label>العنوان الفرعي/المسؤولية:</label><input type="text" id="b245bc" oninput="upB()"></div>
-                <div class="input-group"><label>رقم التصنيف:</label><input type="text" id="bClass" oninput="upB()"></div>
+                <div class="input-group"><label>العنوان الرئيسي (245$a):</label><input type="text" id="b245a" oninput="syncB()"></div>
+                <div class="input-group"><label>العنوان الفرعي والمسؤولية ($b $c):</label><input type="text" id="b245bc" oninput="syncB()"></div>
+                <div class="input-group"><label>رقم التصنيف (050/082):</label><input type="text" id="bClass" oninput="syncB()"></div>
                 
-                <div class="input-group"><label>المدخل الإضافي (700-740):</label>
-                    <select id="bTag7" onchange="upB()"><option value="700">700 - شخص إضافي</option><option value="710">710 - هيئة إضافية</option><option value="711">711 - مؤتمر إضافي</option><option value="740">740 - عنوان إضافي</option></select>
-                    <input type="text" id="b7xx" oninput="upB()">
+                <div class="input-group">
+                    <label>رؤوس الموضوعات (600-651):</label>
+                    <select id="b6xxTag" onchange="syncB()"><option value="650">650 - موضوع عام</option><option value="600">600 - اسم شخص</option><option value="610">610 - هيئة</option><option value="611">611 - ملتقى</option><option value="630">630 - عنوان مقنن</option><option value="651">651 - اسم مكان</option></select>
+                    <input type="text" id="b6xxVal" placeholder="الموضوع الاستنادي..." oninput="syncB()">
                 </div>
 
-                <div class="input-group"><label>رأس الموضوع (600-651):</label>
-                    <select id="bTag6" onchange="upB()"><option value="650">650 - موضوع عام</option><option value="600">600 - اسم شخص</option><option value="610">610 - هيئة</option><option value="611">611 - مؤتمر</option><option value="630">630 - عنوان مقنن</option><option value="651">651 - مكان</option></select>
-                    <input type="text" id="b6xx" oninput="upB()">
+                <div class="input-group">
+                    <label>المداخل الإضافية (700-740):</label>
+                    <select id="b7xxTag" onchange="syncB()"><option value="700">700 - اسم شخص إضافي</option><option value="710">710 - هيئة إضافية</option><option value="711">711 - ملتقى إضافي</option><option value="740">740 - عنوان إضافي</option></select>
+                    <input type="text" id="b7xxVal" placeholder="الاسم الإضافي..." oninput="syncB()">
                 </div>
 
-                <div class="input-group"><label>النشر والوصف المادي:</label><input type="text" id="b260" oninput="upB()"></div>
-                <div class="input-group"><label>بيانات التزويد (900):</label><input type="text" id="b900" oninput="upB()"></div>
+                <div class="input-group"><label>بيانات النشر (260/264):</label><input type="text" id="b260" oninput="syncB()"></div>
+                <div class="input-group"><label>بيانات التزويد (900):</label><input type="text" id="b900" oninput="syncB()"></div>
             </div>
         </div>
         <div class="preview-area">
-            <div class="view-box"><span class="view-label">📄 البطاقة الورقية</span><div class="classic-card" id="bCard"></div></div>
-            <div class="view-box no-print"><span class="view-label">💻 MARC 21</span><div class="marc-view" id="bMarc"></div></div>
+            <div class="view-box"><div class="classic-card" id="bCardView"></div></div>
+            <div class="view-box no-print"><div class="marc-view" id="bMarcView"></div></div>
         </div>
     </div>
 
     <div id="manusPage" class="page">
         <div class="card no-print">
-            <h3>توصيف المخطوط (بداية، خاتمة، تمليكات)</h3>
+            <h3>فهرسة المخطوطات التفصيلية</h3>
             <div class="grid-form">
-                <div class="input-group"><label>العنوان والمؤلف:</label><input type="text" id="mTit" placeholder="العنوان" oninput="upM()"><input type="text" id="mAuth" placeholder="المؤلف" oninput="upM()"></div>
-                <div class="input-group"><label>الناسخ والتاريخ:</label><input type="text" id="mScribe" placeholder="الناسخ" oninput="upM()"><input type="text" id="mDate" placeholder="التاريخ" oninput="upM()"></div>
-                <div class="input-group"><label>نوع الخط والتصنيف:</label><input type="text" id="mFont" oninput="upM()"><input type="text" id="mClass" oninput="upM()"></div>
-                <div class="input-group" style="grid-column: span 2;"><label>بداية المخطوط:</label><textarea id="mStart" rows="2" oninput="upM()"></textarea></div>
-                <div class="input-group" style="grid-column: span 2;"><label>خاتمة المخطوط:</label><textarea id="mEnd" rows="2" oninput="upM()"></textarea></div>
-                <div class="input-group" style="grid-column: span 2;"><label>التمليكات والأختام والقيود:</label><textarea id="mSeal" oninput="upM()"></textarea></div>
+                <div class="input-group"><label>العنوان والمؤلف:</label><input type="text" id="mTit" placeholder="العنوان" oninput="syncM()"><input type="text" id="mAuth" placeholder="المؤلف" oninput="syncM()"></div>
+                <div class="input-group"><label>الناسخ وتاريخ النسخ:</label><input type="text" id="mScribe" placeholder="الناسخ" oninput="syncM()"><input type="text" id="mDate" placeholder="التاريخ" oninput="syncM()"></div>
+                <div class="input-group" style="grid-column: span 2;"><label>بداية المخطوط:</label><textarea id="mStart" rows="2" placeholder="أول المخطوط..." oninput="syncM()"></textarea></div>
+                <div class="input-group" style="grid-column: span 2;"><label>خاتمة المخطوط:</label><textarea id="mEnd" rows="2" placeholder="آخر المخطوط..." oninput="syncM()"></textarea></div>
+                <div class="input-group"><label>نوع الخط:</label><input type="text" id="mFont" oninput="syncM()"></div>
+                <div class="input-group"><label>رقم التصنيف/الحفظ:</label><input type="text" id="mClass" oninput="syncM()"></div>
+                <div class="input-group" style="grid-column: span 2;"><label>التمليكات والأختام والقيود (541):</label><textarea id="mSeal" oninput="syncM()"></textarea></div>
             </div>
         </div>
         <div class="preview-area">
-            <div class="view-box"><span class="view-label">📄 بطاقة المخطوط</span><div class="classic-card" id="mCard"></div></div>
-            <div class="view-box no-print"><span class="view-label">💻 MARC 21</span><div class="marc-view" id="mMarc"></div></div>
+            <div class="view-box"><div class="classic-card" id="mCardView"></div></div>
+            <div class="view-box no-print"><div class="marc-view" id="mMarcView"></div></div>
         </div>
     </div>
 
 </div>
 
-<footer>جميع الحقوق محفوظة © عماد كاظم السعدي 2026</footer>
+<footer>جميع الحقوق محفوظة للأستاذ عماد كاظم السعدي © 2026</footer>
 
 <script>
-    let db = [];
-    function openTab(p, t) {
-        document.querySelectorAll('.page').forEach(x => x.classList.remove('active'));
-        document.querySelectorAll('.nav-tabs button').forEach(x => x.classList.remove('active'));
-        document.getElementById(p).classList.add('active'); document.getElementById(t).classList.add('active');
+    let authorityDb = [];
+
+    function showTab(pageId, btnId) {
+        document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+        document.querySelectorAll('.nav-tabs button').forEach(b => b.classList.remove('active'));
+        document.getElementById(pageId).classList.add('active');
+        document.getElementById(btnId).classList.add('active');
     }
 
-    document.getElementById('xlIn').addEventListener('change', function(e) {
-        const r = new FileReader();
-        r.onload = (ev) => {
-            const wb = XLSX.read(ev.target.result, {type:'array'});
-            db = XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]]);
-            alert("تم تحميل ملف الاستناد!");
+    document.getElementById('excelFile').addEventListener('change', function(e) {
+        const reader = new FileReader();
+        reader.onload = (ev) => {
+            const wb = XLSX.read(ev.target.result, {type: 'array'});
+            authorityDb = XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]]);
+            alert("تم ربط الملف الاستنادي!");
         };
-        r.readAsArrayBuffer(e.target.files[0]);
+        reader.readAsArrayBuffer(e.target.files[0]);
     });
 
-    function doSearch(m) {
-        const q = document.getElementById('sq').value.toLowerCase();
-        const res = db.filter(r => Object.values(r).some(v => String(v).toLowerCase().includes(q)));
-        let h = '<table border="1" style="width:100%; border-collapse:collapse;"><tr>' + Object.keys(db[0] || {}).map(k=>`<th>${k}</th>`).join('') + '</tr>';
-        res.forEach(r => h += '<tr>' + Object.values(r).map(v=>`<td>${v}</td>`).join('') + '</tr>');
-        document.getElementById('res').innerHTML = h + '</table>';
+    function runSearch() {
+        const q = document.getElementById('searchQuery').value.toLowerCase();
+        const res = authorityDb.filter(r => Object.values(r).some(v => String(v).toLowerCase().includes(q)));
+        let h = '<table border="1" style="width:100%; border-collapse:collapse; background:white;"><tr>' + 
+            Object.keys(authorityDb[0] || {}).map(k => `<th>${k}</th>`).join('') + '</tr>';
+        res.forEach(r => h += '<tr>' + Object.values(r).map(v => `<td>${v}</td>`).join('') + '</tr>');
+        document.getElementById('searchTableArea').innerHTML = h + '</table>';
     }
 
-    function clearResults() { document.getElementById('sq').value=""; document.getElementById('res').innerHTML=""; }
-
-    function upB() {
-        const v = id => document.getElementById(id).value;
-        const tag1 = v('bTag1'), tag6 = v('bTag6'), tag7 = v('bTag7');
-        
-        document.getElementById('bCard').innerHTML = `<div class="card-class">${v('bClass')}</div><div class="card-body"><b>${v('bAuth')}</b><br>${v('b245a')} : ${v('b245bc')}.<br>${v('b260')}.<br>1. ${v('b6xx')}. <br>أ. ${v('b7xx')}</div>`;
-        
-        let m = `LDR 00000nam a2200000 u 4500\n<span class="tag">082</span> ## <span class="sub">$a</span> ${v('bClass')}\n<span class="tag">${tag1}</span> 1# <span class="sub">$a</span> ${v('bAuth')}\n<span class="tag">245</span> 10 <span class="sub">$a</span> ${v('b245a')} <span class="sub">$c</span> ${v('b245bc')}\n<span class="tag">260</span> ## <span class="sub">$a</span> ${v('b260')}\n<span class="tag">${tag6}</span> #4 <span class="sub">$a</span> ${v('b6xx')}\n<span class="tag">${tag7}</span> 1# <span class="sub">$a</span> ${v('b7xx')}\n<span class="tag">900</span> ## <span class="sub">$a</span> ${v('b900')}`;
-        document.getElementById('bMarc').innerHTML = m;
+    function clearSearchRes() {
+        document.getElementById('searchQuery').value = "";
+        document.getElementById('searchTableArea').innerHTML = "";
     }
 
-    function upM() {
-        const v = id => document.getElementById(id).value;
-        document.getElementById('mCard').innerHTML = `<div class="card-class">${v('mClass')}</div><div class="card-body"><b>${v('mAuth')}</b><br>${v('mTit')} [مخطوط].<br>نسخه: ${v('mScribe')}، ${v('mDate')}.<br>الخط: ${v('mFont')}.<br><b>البداية:</b> ${v('mStart')}<br><b>الخاتمة:</b> ${v('mEnd')}<br>${v('mSeal')}</div>`;
+    function syncB() {
+        const g = id => document.getElementById(id).value;
+        const tag1 = g('b1xxTag'), tag6 = g('b6xxTag'), tag7 = g('b7xxTag');
         
-        let m = `LDR 00000nam a2200000 u 4500\n<span class="tag">090</span> ## <span class="sub">$a</span> ${v('mClass')}\n<span class="tag">100</span> 1# <span class="sub">$a</span> ${v('mAuth')}\n<span class="tag">245</span> 10 <span class="sub">$a</span> ${v('mTit')}\n<span class="tag">500</span> ## <span class="sub">$a</span> بداية المخطوط: ${v('mStart')}\n<span class="tag">500</span> ## <span class="sub">$a</span> خاتمة المخطوط: ${v('mEnd')}\n<span class="tag">541</span> ## <span class="sub">$a</span> ${v('mSeal')}\n<span class="tag">700</span> 1# <span class="sub">$a</span> ${v('mScribe')} (ناسخ)`;
-        document.getElementById('mMarc').innerHTML = m;
+        document.getElementById('bCardView').innerHTML = `<div class="card-class">${g('bClass')}</div><div class="card-body"><b>${g('b1xxVal')}</b><br>${g('b245a')} : ${g('b245bc')}.<br>${g('b260')}.<br>1. ${g('b6xxVal')}. <br>أ. ${g('b7xxVal')}</div>`;
+        
+        let m = `LDR 00000nam a2200000 u 4500\n<span class="tag">082</span> ## <span class="sub">$a</span> ${g('bClass')}\n<span class="tag">${tag1}</span> 1# <span class="sub">$a</span> ${g('b1xxVal')}\n<span class="tag">245</span> 10 <span class="sub">$a</span> ${g('b245a')} <span class="sub">$c</span> ${g('b245bc')}\n<span class="tag">260</span> ## <span class="sub">$a</span> ${g('b260')}\n<span class="tag">${tag6}</span> #4 <span class="sub">$a</span> ${g('b6xxVal')}\n<span class="tag">${tag7}</span> 1# <span class="sub">$a</span> ${g('b7xxVal')}\n<span class="tag">900</span> ## <span class="sub">$a</span> ${g('b900')}`;
+        document.getElementById('bMarcView').innerHTML = m;
+    }
+
+    function syncM() {
+        const g = id => document.getElementById(id).value;
+        document.getElementById('mCardView').innerHTML = `<div class="card-class">${g('mClass')}</div><div class="card-body"><b>${g('mAuth')}</b><br>${g('mTit')} [مخطوط].<br>نسخه: ${g('mScribe')}، ${g('mDate')}.<br>الخط: ${g('mFont')}.<br><b>البداية:</b> ${g('mStart')}<br><b>الخاتمة:</b> ${g('mEnd')}<br>${g('mSeal')}</div>`;
+        
+        let m = `LDR 00000nam a2200000 u 4500\n<span class="tag">090</span> ## <span class="sub">$a</span> ${g('mClass')}\n<span class="tag">100</span> 1# <span class="sub">$a</span> ${g('mAuth')}\n<span class="tag">245</span> 10 <span class="sub">$a</span> ${g('mTit')}\n<span class="tag">500</span> ## <span class="sub">$a</span> بداية المخطوط: ${g('mStart')}\n<span class="tag">500</span> ## <span class="sub">$a</span> خاتمة المخطوط: ${g('mEnd')}\n<span class="tag">541</span> ## <span class="sub">$a</span> ${g('mSeal')}\n<span class="tag">546</span> ## <span class="sub">$a</span> ${g('mFont')}\n<span class="tag">700</span> 1# <span class="sub">$a</span> ${g('mScribe')} (ناسخ)`;
+        document.getElementById('mMarcView').innerHTML = m;
     }
 </script>
 </body>
