@@ -2,14 +2,14 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <title>منصة السعدي الاحترافية - الإصدار الشامل المطوّر 2026</title>
+    <title>منصة السعدي - الإصدار الأكاديمي الشامل 2026</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     <style>
         :root { --primary: #1a2a6c; --secondary: #b21f1f; --save: #27ae60; --clear: #e67e22; --ai: #8e44ad; --bg: #f4f7f6; }
         body { font-family: 'Segoe UI', Tahoma, sans-serif; background: var(--bg); margin: 0; padding-bottom: 50px; }
         header { background: linear-gradient(135deg, var(--primary), #2a4858); color: white; padding: 15px; text-align: center; }
         .nav-tabs { display: flex; background: #fff; border-bottom: 3px solid var(--secondary); position: sticky; top: 0; z-index: 1000; overflow-x: auto; }
-        .nav-tabs button { flex: 1; min-width: 120px; padding: 15px; border: none; background: none; font-weight: bold; cursor: pointer; color: #555; white-space: nowrap; }
+        .nav-tabs button { flex: 1; min-width: 120px; padding: 15px; border: none; background: none; font-weight: bold; cursor: pointer; color: #555; }
         .nav-tabs button.active { color: var(--primary); border-bottom: 5px solid var(--primary); background: #f9f9f9; }
         .container { max-width: 1400px; margin: 20px auto; padding: 0 15px; }
         .page { display: none; } .page.active { display: block; }
@@ -27,8 +27,6 @@
         .action-btns { display: flex; gap: 10px; margin: 20px 0; }
         .btn-save-main { flex: 3; background: var(--save); color: white; padding: 15px; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 1.1rem; }
         .btn-clear { flex: 1; background: var(--clear); color: white; padding: 15px; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 1.1rem; }
-        .ai-search-box { background: #fdfaff; border: 2px solid var(--ai); padding: 20px; border-radius: 15px; }
-        .img-preview { max-width: 200px; margin-top: 10px; border-radius: 8px; display: none; }
         .data-table { width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 0.85rem; background: white; }
         .data-table th { background: var(--primary); color: white; padding: 10px; border: 1px solid #ddd; }
         .data-table td { padding: 8px; border: 1px solid #ddd; text-align: center; }
@@ -37,22 +35,22 @@
 <body>
 
 <header>
-    <h1>منصة السعدي الاحترافية - نظام الفهرسة والبحث الذكي 2026</h1>
-    <p>بإشراف وتصميم الخبير الأستاذ عماد كاظم السعدي</p>
+    <h1>منصة السعدي - الإصدار الهيكلي الكامل المطور</h1>
+    <p>بإشراف الخبير الأستاذ عماد كاظم السعدي © 2026</p>
 </header>
 
 <nav class="nav-tabs">
     <button class="active" onclick="tab('p2', this)">📚 فهرسة الكتب</button>
     <button onclick="tab('p3', this)">📜 فهرسة المخطوطات</button>
-    <button onclick="tab('p5', this)">🤖 البحث الذكي & AI</button>
-    <button onclick="tab('p4', this)">📊 السجل المدرج</button>
+    <button onclick="tab('p5', this)">🤖 البحث الآلي & AI</button>
+    <button onclick="tab('p4', this)">📊 السجل العام</button>
 </nav>
 
 <div class="container">
 
     <div id="p2" class="page active">
         <div class="card">
-            <h3 class="section-title">فهرسة الكتب - الحقول الأكاديمية المتكررة</h3>
+            <h3 class="section-title">فهرسة الكتب - الحقول الأكاديمية (الهيكل الأصلي)</h3>
             <div class="grid-form" id="bookForm">
                 <div class="input-group"><label>ديوي (082):</label><input type="text" id="b082" oninput="upB()"></div>
                 <div class="input-group"><label>الكونجرس (050):</label><input type="text" id="b050" oninput="upB()"></div>
@@ -75,7 +73,7 @@
                 <div class="input-group"><label>الوصف المادي (300):</label><input type="text" id="b300" oninput="upB()"></div>
 
                 <div class="input-group" id="sub-area">
-                    <label>رؤوس الموضوعات (6xx) - متكرر:</label>
+                    <label>رؤوس الموضوعات (600/610/650/651) - متكرر:</label>
                     <div class="repeat-box">
                         <select class="b6type" onchange="upB()"><option value="650">650</option><option value="600">600</option><option value="610">610</option><option value="651">651</option></select>
                         <input type="text" class="b6val" oninput="upB()">
@@ -95,7 +93,7 @@
                 <div class="input-group"><label>تزويد (900):</label><input type="text" id="b900" oninput="upB()"></div>
             </div>
             <div class="action-btns">
-                <button class="btn-save-main" onclick="saveToSheet('كتاب')">💾 حفظ الكتاب في السجل</button>
+                <button class="btn-save-main" onclick="saveToSheet('كتاب')">💾 حفظ في السجل</button>
                 <button class="btn-clear" onclick="clearForm('bookForm')">🧹 مسح الحقول</button>
             </div>
         </div>
@@ -104,19 +102,19 @@
 
     <div id="p3" class="page">
         <div class="card">
-            <h3 class="section-title">فهرسة المخطوطات (مع حقل المصدر)</h3>
+            <h3 class="section-title">فهرسة المخطوطات</h3>
             <div class="grid-form" id="manuForm">
                 <div class="input-group"><label>العنوان:</label><input type="text" id="m245" oninput="upM()"></div>
                 <div class="input-group"><label>المؤلف:</label><input type="text" id="mAut" oninput="upM()"></div>
                 <div class="input-group" style="grid-column: span 2;"><label>بداية المخطوط:</label><textarea id="mSta" oninput="upM()"></textarea></div>
                 <div class="input-group" style="grid-column: span 2;"><label>خاتمة المخطوط:</label><textarea id="mEnd" oninput="upM()"></textarea></div>
                 <div class="input-group"><label>الموضوع (6xx):</label><input type="text" id="mSub" oninput="upM()"></div>
-                <div class="input-group"><label>المصدر (المكتبة/المجموعة):</label><input type="text" id="mSrc" placeholder="مثال: مكتبة الإسكندرية / نسخة باريس" oninput="upM()"></div>
+                <div class="input-group"><label>المصدر:</label><input type="text" id="mSrc" oninput="upM()"></div>
                 <div class="input-group"><label>رقم الحفظ:</label><input type="text" id="mCla" oninput="upM()"></div>
                 <div class="input-group"><label>الملاحظات (500):</label><input type="text" id="mNot" oninput="upM()"></div>
             </div>
             <div class="action-btns">
-                <button class="btn-save-main" onclick="saveToSheet('مخطوط')">💾 حفظ المخطوط في السجل</button>
+                <button class="btn-save-main" onclick="saveToSheet('مخطوط')">💾 حفظ المخطوط</button>
                 <button class="btn-clear" onclick="clearForm('manuForm')">🧹 مسح الحقول</button>
             </div>
         </div>
@@ -124,33 +122,33 @@
     </div>
 
     <div id="p5" class="page">
-        <div class="card ai-search-box">
-            <h3 class="section-title" style="color:var(--ai)">🤖 محرك البحث الذكي والتعرف البصري</h3>
+        <div class="card" style="border-top-color: var(--ai);">
+            <h3 class="section-title" style="color:var(--ai)">🤖 محرك البحث الآلي الذكي</h3>
             <div class="grid-form">
-                <div class="input-group"><label>البحث بالخلاصة (520):</label><input type="text" id="aiSearchText" placeholder="ادخل كلمات من ملخص الكتاب..."></div>
-                <div class="input-group"><label>البحث بـ ISBN:</label><input type="text" id="aiSearchIsbn" placeholder="000-000-000-0"></div>
-                <div class="input-group">
-                    <label>تحميل صورة (كتاب / مخطوط):</label>
-                    <input type="file" accept="image/*" onchange="previewImg(event)">
-                    <img id="imgOut" class="img-preview" alt="معاينة">
-                </div>
+                <div class="input-group"><label>البحث في (العناوين، المؤلفين، الخلاصات):</label>
+                <input type="text" id="aiSearch" onkeyup="runLiveSearch()" placeholder="اكتب للبحث الفوري..."></div>
+                <div class="input-group"><label>البحث بـ ISBN:</label>
+                <input type="text" id="aiIsbn" onkeyup="runLiveSearch()" placeholder="رقم الـ ISBN..."></div>
             </div>
-            <button class="btn-save-main" style="background:var(--ai); margin-top:20px;" onclick="alert('جاري محاكاة البحث الذكي في قاعدة البيانات...')">🔍 تشغيل البحث العميق</button>
+            <div id="aiResults" style="margin-top:20px; display:none;">
+                <h4 style="color:var(--ai)">النتائج المطابقة:</h4>
+                <div id="aiTable"></div>
+            </div>
         </div>
     </div>
 
     <div id="p4" class="page">
-        <div class="sheet-container">
-            <button onclick="exportExcel()" style="float:left; padding:10px; background:#2c3e50; color:white; border:none; cursor:pointer;">📥 تصدير Excel</button>
-            <h3 style="color:var(--save)">📊 قاعدة البيانات المحفوظة</h3>
-            <div style="overflow-x:auto;"><table class="data-table"><thead><tr><th>النوع</th><th>العنوان</th><th>المؤلف</th><th>المصدر/الناشر</th><th>ISBN</th><th>الملاحظات</th></tr></thead><tbody id="sheetBody"></tbody></table></div>
+        <div class="card">
+            <button onclick="exportExcel()" style="float:left; padding:8px; background:#2c3e50; color:white; border:none; border-radius:4px; cursor:pointer;">📥 تصدير Excel</button>
+            <h3 class="section-title">📊 السجل العام للبيانات المحفوظة</h3>
+            <div style="overflow-x:auto;"><table class="data-table"><thead><tr><th>النوع</th><th>العنوان</th><th>المؤلف</th><th>الناشر/المصدر</th><th>الموضوع</th><th>ISBN</th></tr></thead><tbody id="sheetBody"></tbody></table></div>
         </div>
     </div>
 
 </div>
 
 <script>
-    let sheetData = [];
+    let db = []; 
     function tab(id, btn) {
         document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
         document.getElementById(id).classList.add('active');
@@ -170,10 +168,52 @@
         const area = document.getElementById('sub-area'); area.insertBefore(div, area.querySelector('.btn-add'));
     }
 
-    function previewImg(e) {
-        const out = document.getElementById('imgOut');
-        out.src = URL.createObjectURL(e.target.files[0]);
-        out.style.display = 'block';
+    function upB() {
+        const v = id => document.getElementById(id)?.value || "";
+        const all = cls => Array.from(document.getElementsByClassName(cls)).map(i => i.value).filter(x => x);
+        document.getElementById('bC').innerHTML = `<b>${v('b100')}</b><br>${v('b245')}. -- ${all('b260').join(' ; ')}. -- ${v('b300')}.<br>ملاحظات: ${v('b500')}`;
+        document.getElementById('bM').innerHTML = `100 1# $a ${v('b100')}\n245 10 $a ${v('b245')}\n${all('b260').map(p=>`260 ## $a ${p}`).join('\n')}\n520 ## $a ${v('b520')}`;
+    }
+
+    function upM() {
+        const v = id => document.getElementById(id).value || "";
+        document.getElementById('mC').innerHTML = `<b>${v('mAut')}</b><br>${v('m245')}<br>المصدر: ${v('mSrc')}<br>بداية: ${v('mSta')}`;
+        document.getElementById('mM').innerHTML = `245 $a ${v('m245')}\n500 $a ${v('mSrc')}`;
+    }
+
+    function saveToSheet(type) {
+        const v = id => document.getElementById(id)?.value || "";
+        const all = cls => Array.from(document.getElementsByClassName(cls)).map(i => i.value).filter(x=>x).join(' | ');
+        let rec = (type==='كتاب') ? {
+            t: 'كتاب', tit: v('b245'), aut: v('b100'), pub: all('b260'), sub: all('b6val'), isbn: all('b020'), summ: v('b520')
+        } : {
+            t: 'مخطوط', tit: v('m245'), aut: v('mAut'), pub: v('mSrc'), sub: v('mSub'), isbn: 'مخطوط', summ: v('mSta')
+        };
+        db.push(rec);
+        refreshTable();
+        alert("تم الحفظ بنجاح!");
+    }
+
+    function refreshTable() {
+        document.getElementById('sheetBody').innerHTML = db.map(r => `<tr><td>${r.t}</td><td>${r.tit}</td><td>${r.aut}</td><td>${r.pub}</td><td>${r.sub}</td><td>${r.isbn}</td></tr>`).join('');
+    }
+
+    function runLiveSearch() {
+        const q = document.getElementById('aiSearch').value.toLowerCase();
+        const isbn = document.getElementById('aiIsbn').value;
+        const out = document.getElementById('aiResults');
+        if(!q && !isbn) { out.style.display='none'; return; }
+        
+        const results = db.filter(r => r.tit.toLowerCase().includes(q) || r.aut.toLowerCase().includes(q) || r.summ.toLowerCase().includes(q) || r.isbn.includes(isbn));
+        
+        if(results.length > 0) {
+            out.style.display='block';
+            document.getElementById('aiTable').innerHTML = `<table class="data-table"><thead><tr><th>النوع</th><th>العنوان</th><th>المؤلف</th></tr></thead><tbody>` + 
+            results.map(res => `<tr><td>${res.t}</td><td>${res.tit}</td><td>${res.aut}</td></tr>`).join('') + `</tbody></table>`;
+        } else {
+            document.getElementById('aiTable').innerHTML = "<p>لا توجد نتائج مطابقة.</p>";
+            out.style.display='block';
+        }
     }
 
     function clearForm(id) {
@@ -184,37 +224,11 @@
         }
     }
 
-    function upB() {
-        const v = id => document.getElementById(id)?.value || "";
-        const all = cls => Array.from(document.getElementsByClassName(cls)).map(i => i.value).filter(x => x);
-        document.getElementById('bC').innerHTML = `<b>${v('b100')}</b><br>${v('b245')}. -- ${all('b260').join(' ; ')}. -- ${v('b300')}.<br>${v('b500')}`;
-        document.getElementById('bM').innerHTML = `100 1# $a ${v('b100')}\n245 10 $a ${v('b245')}\n${all('b260').map(p=>`260 ## $a ${p}`).join('\n')}`;
-    }
-
-    function upM() {
-        const v = id => document.getElementById(id).value || "";
-        document.getElementById('mC').innerHTML = `<b>${v('mAut')}</b><br>${v('m245')}<br>المصدر: ${v('mSrc')}<br>البداية: ${v('mSta')}`;
-        document.getElementById('mM').innerHTML = `245 $a ${v('m245')}\n500 $a ${v('mSrc')}\n500 $a ${v('mNot')}`;
-    }
-
-    function saveToSheet(type) {
-        const v = id => document.getElementById(id)?.value || "";
-        const all = cls => Array.from(document.getElementsByClassName(cls)).map(i => i.value).filter(x=>x).join(' | ');
-        let rec = (type==='كتاب') ? {
-            t: 'كتاب', tit: v('b245'), aut: v('b100'), src: all('b260'), isbn: all('b020'), not: v('b500')
-        } : {
-            t: 'مخطوط', tit: v('m245'), aut: v('mAut'), src: v('mSrc'), isbn: '-', not: v('mNot')
-        };
-        sheetData.push(rec);
-        document.getElementById('sheetBody').innerHTML = sheetData.map(r => `<tr><td>${r.t}</td><td>${r.tit}</td><td>${r.aut}</td><td>${r.src}</td><td>${r.isbn}</td><td>${r.not}</td></tr>`).join('');
-        alert("تم الحفظ!");
-    }
-
     function exportExcel() {
-        const ws = XLSX.utils.json_to_sheet(sheetData);
+        const ws = XLSX.utils.json_to_sheet(db);
         const wb = XLSX.utils.book_new();
         XLSX.utils.book_append_sheet(wb, ws, "Records");
-        XLSX.writeFile(wb, "سجل_السعدي.xlsx");
+        XLSX.writeFile(wb, "سجل_منصة_السعدي.xlsx");
     }
 </script>
 </body>
