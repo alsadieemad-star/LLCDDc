@@ -54,4 +54,105 @@
                 <div class="input-group"><label>ديوي (082):</label><input type="text" id="b082" oninput="upB()"></div>
                 <div class="input-group"><label>الكونجرس (050):</label><input type="text" id="b050" oninput="upB()"></div>
                 <div class="input-group"><label>المدخل الرئيسي (100):</label><input type="text" id="b100" oninput="upB()"></div>
-                <div class="input-group"><label>العنوان (245$a$b):</label><input type="text"
+                <div class="input-group"><label>العنوان (245$a$b):</label><input type="text" id="b245" oninput="upB()"></div>
+                <div class="input-group"><label>بيان المسؤولية (245$c):</label><input type="text" id="b245c" oninput="upB()"></div>
+                <div class="input-group" id="isbn-area"><label>تدمك (020):</label><div class="repeat-box"><input type="text" class="b020" oninput="upB()"></div><button class="btn-add" onclick="addInp('isbn-area', 'b020')">+ إضافة ISBN</button></div>
+                <div class="input-group" id="pub-area"><label>بيانات النشر (260):</label><div class="repeat-box"><input type="text" class="b260" oninput="upB()"></div><button class="btn-add" onclick="addInp('pub-area', 'b260')">+ إضافة ناشر</button></div>
+                <div class="input-group"><label>الوصف المادي (300):</label><input type="text" id="b300" oninput="upB()"></div>
+                <div class="input-group" id="sub-area"><label>الموضوعات (6xx):</label><div class="repeat-box"><select class="b6type" onchange="upB()"><option value="650">650</option><option value="600">600</option><option value="610">610</option><option value="651">651</option></select><input type="text" class="b6val" oninput="upB()"></div><button class="btn-add" onclick="addSub()">+ إضافة موضوع</button></div>
+                <div class="input-group"><label>ملاحظات (500):</label><input type="text" id="b500" oninput="upB()"></div>
+                <div class="input-group"><label>ملخص (520):</label><textarea id="b520" oninput="upB()"></textarea></div>
+                <div class="input-group"><label>تزويد (900):</label><input type="text" id="b900" oninput="upB()"></div>
+            </div>
+            <div class="action-btns">
+                <button class="btn-save-main" onclick="saveToSheet('كتاب')">💾 حفظ الكتاب</button>
+                <button class="btn-clear" onclick="clearForm('bookForm')">🧹 مسح الحقول</button>
+            </div>
+        </div>
+        <div class="preview-area"><div id="bC" class="classic-card"></div><div id="bM" class="marc-view"></div></div>
+    </div>
+
+    <div id="p3" class="page">
+        <div class="card">
+            <h3 class="section-title">فهرسة المخطوطات الأكاديمية</h3>
+            <div class="grid-form" id="manuForm">
+                <div class="input-group"><label>العنوان:</label><input type="text" id="m245" oninput="upM()"></div>
+                <div class="input-group"><label>المؤلف:</label><input type="text" id="mAut" oninput="upM()"></div>
+                <div class="input-group"><label>المصدر (المكتبة/الخزانة):</label><input type="text" id="mSrc" placeholder="ادخل مصدر المخطوط..." oninput="upM()"></div>
+                <div class="input-group"><label>رقم الحفظ:</label><input type="text" id="mCla" oninput="upM()"></div>
+                <div class="input-group" style="grid-column: span 2;"><label>بداية المخطوط:</label><textarea id="mSta" oninput="upM()"></textarea></div>
+                <div class="input-group" style="grid-column: span 2;"><label>خاتمة المخطوط:</label><textarea id="mEnd" oninput="upM()"></textarea></div>
+                <div class="input-group"><label>الموضوع:</label><input type="text" id="mSub" oninput="upM()"></div>
+                <div class="input-group"><label>الملاحظات:</label><input type="text" id="mNot" oninput="upM()"></div>
+            </div>
+            <div class="action-btns">
+                <button class="btn-save-main" onclick="saveToSheet('مخطوط')">💾 حفظ المخطوط</button>
+                <button class="btn-clear" onclick="clearForm('manuForm')">🧹 مسح الحقول</button>
+            </div>
+        </div>
+        <div class="preview-area"><div id="mC" class="classic-card"></div><div id="mM" class="marc-view"></div></div>
+    </div>
+
+    <div id="p4" class="page">
+        <div class="card">
+            <button onclick="exportExcel()" style="float:left; padding:8px; background:#2c3e50; color:white; border:none; border-radius:5px; cursor:pointer;">📥 تصدير Excel</button>
+            <h3 class="section-title">📊 السجل العام للبيانات</h3>
+            <div style="overflow-x:auto;"><table class="data-table"><thead><tr><th>النوع</th><th>العنوان</th><th>المؤلف</th><th>الناشر/المصدر</th><th>الموضوع</th><th>الملاحظات</th></tr></thead><tbody id="sheetBody"></tbody></table></div>
+        </div>
+    </div>
+</div>
+
+<script>
+    let sheetData = [];
+    function tab(id, btn) {
+        document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+        document.getElementById(id).classList.add('active');
+        document.querySelectorAll('.nav-tabs button').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+    }
+    function addInp(areaId, cls) {
+        const div = document.createElement('div'); div.className = 'repeat-box';
+        div.innerHTML = `<input type="text" class="${cls}" oninput="upB()">`;
+        const area = document.getElementById(areaId); area.insertBefore(div, area.querySelector('.btn-add'));
+    }
+    function addSub() {
+        const div = document.createElement('div'); div.className = 'repeat-box';
+        div.innerHTML = `<select class="b6type" onchange="upB()"><option value="650">650</option><option value="600">600</option><option value="610">610</option><option value="651">651</option></select><input type="text" class="b6val" oninput="upB()">`;
+        const area = document.getElementById('sub-area'); area.insertBefore(div, area.querySelector('.btn-add'));
+    }
+    function upB() {
+        const v = id => document.getElementById(id)?.value || "";
+        const all = cls => Array.from(document.getElementsByClassName(cls)).map(i => i.value).filter(x => x);
+        document.getElementById('bC').innerHTML = `<b>${v('b100')}</b><br>${v('b245')}. -- ${all('b260').join(' ; ')}. -- ${v('b300')}.<br>${v('b500')}`;
+        document.getElementById('bM').innerHTML = `100 1# $a ${v('b100')}\n245 10 $a ${v('b245')}\n${all('b260').map(p=>`260 ## $a ${p}`).join('\n')}`;
+    }
+    function upM() {
+        const v = id => document.getElementById(id).value || "";
+        document.getElementById('mC').innerHTML = `<b>${v('mAut')}</b><br>${v('m245')}<br>المصدر: ${v('mSrc')}<br>رقم الحفظ: ${v('mCla')}<br>البداية: ${v('mSta')}`;
+        document.getElementById('mM').innerHTML = `245 $a ${v('m245')}\n500 $a المصدر: ${v('mSrc')}\n500 $a ملاحظات: ${v('mNot')}`;
+    }
+    function saveToSheet(type) {
+        const v = id => document.getElementById(id)?.value || "";
+        const all = cls => Array.from(document.getElementsByClassName(cls)).map(i => i.value).filter(x=>x).join(' | ');
+        let rec = (type==='كتاب') ? { t: 'كتاب', tit: v('b245'), aut: v('b100'), src: all('b260'), sub: all('b6val'), not: v('b500') } 
+                                 : { t: 'مخطوط', tit: v('m245'), aut: v('mAut'), src: v('mSrc'), sub: v('mSub'), not: v('mNot') };
+        sheetData.push(rec);
+        document.getElementById('sheetBody').innerHTML = sheetData.map(r => `<tr><td>${r.t}</td><td>${r.tit}</td><td>${r.aut}</td><td>${r.src}</td><td>${r.sub}</td><td>${r.not}</td></tr>`).join('');
+        alert("تم الحفظ بنجاح!");
+    }
+    function clearForm(id) {
+        if(confirm("هل تريد مسح الحقول؟")) {
+            const f = document.getElementById(id); f.querySelectorAll('input, textarea').forEach(i => i.value = "");
+            f.querySelectorAll('.repeat-box').forEach((box, idx) => { if(idx > 0) box.remove(); });
+            upB(); upM();
+        }
+    }
+    function exportExcel() {
+        const ws = XLSX.utils.json_to_sheet(sheetData);
+        const wb = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(wb, ws, "Records");
+        XLSX.writeFile(wb, "سجل_منصة_السعدي.xlsx");
+    }
+</script>
+</body>
+</html>
