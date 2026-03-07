@@ -2,7 +2,7 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <title>منصة السعدي - الإصدار الأكاديمي الشامل والنهائي</title>
+    <title>منصة السعدي الاحترافية - النسخة المعتمدة</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     <style>
         :root { --primary: #1a2a6c; --secondary: #b21f1f; --save: #27ae60; --clear: #e67e22; --bg: #f4f7f6; }
@@ -19,143 +19,131 @@
         .input-group { background: #fafafa; padding: 10px; border-radius: 8px; border: 1px solid #eee; display: flex; flex-direction: column; }
         .repeat-box { border: 1px dashed var(--primary); padding: 8px; margin-top: 5px; border-radius: 5px; display: flex; gap: 5px; }
         label { font-weight: bold; font-size: 0.85rem; color: var(--primary); margin-bottom: 5px; }
-        input, select, textarea { padding: 8px; border: 1px solid #ccc; border-radius: 6px; width: 100%; box-sizing: border-box; }
+        input, textarea { padding: 8px; border: 1px solid #ccc; border-radius: 6px; width: 100%; box-sizing: border-box; }
         .btn-add { background: var(--primary); color: white; border: none; padding: 4px 8px; cursor: pointer; border-radius: 4px; font-size: 0.75rem; margin-top: 5px; width: fit-content; }
         .action-btns { display: flex; gap: 10px; margin: 20px 0; }
-        .btn-save-main { flex: 3; background: var(--save); color: white; padding: 15px; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 1.1rem; }
-        .btn-clear { flex: 1; background: var(--clear); color: white; padding: 15px; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 1.1rem; }
+        .btn-save { flex: 3; background: var(--save); color: white; padding: 15px; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; }
+        .btn-clear { flex: 1; background: var(--clear); color: white; padding: 15px; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; }
         .preview-area { display: grid; grid-template-columns: repeat(auto-fit, minmax(450px, 1fr)); gap: 20px; }
-        .classic-card { background: white; border: 1px solid #333; padding: 30px; font-family: 'Times New Roman', serif; min-height: 400px; line-height: 1.6; }
+        .classic-card { background: white; border: 1px solid #333; padding: 30px; min-height: 400px; line-height: 1.6; }
         .marc-view { background: #282c34; color: #9cdcfe; padding: 15px; border-radius: 10px; direction: ltr; text-align: left; font-family: monospace; white-space: pre-wrap; font-size: 0.9rem; }
         .data-table { width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 0.85rem; background: white; }
-        .data-table th { background: var(--primary); color: white; padding: 10px; border: 1px solid #ddd; }
-        .data-table td { padding: 8px; border: 1px solid #ddd; text-align: center; }
+        .data-table th, .data-table td { padding: 10px; border: 1px solid #ddd; text-align: center; }
+        .data-table th { background: var(--primary); color: white; }
     </style>
 </head>
 <body>
 
 <header>
-    <h1>منصة السعدي - الإصدار الأكاديمي الشامل</h1>
+    <h1>منصة السعدي للفهرسة - الإصدار الأكاديمي الشامل</h1>
     <p>بإشراف الخبير الأستاذ عماد كاظم السعدي © 2026</p>
 </header>
 
 <nav class="nav-tabs">
-    <button class="active" onclick="tab('p2', this)">📚 فهرسة الكتب</button>
-    <button onclick="tab('p3', this)">📜 فهرسة المخطوطات</button>
-    <button onclick="tab('p4', this)">📊 السجل العام (Sheet)</button>
+    <button class="active" onclick="tab('p1', this)">📚 فهرسة الكتب</button>
+    <button onclick="tab('p2', this)">📜 فهرسة المخطوطات</button>
+    <button onclick="tab('p3', this)">📊 السجل العام</button>
 </nav>
 
 <div class="container">
 
-    <div id="p2" class="page active">
+    <div id="p1" class="page active">
         <div class="card">
-            <h3 class="section-title">فهرسة الكتب - الحقول المتكررة (MARC21)</h3>
+            <h3 class="section-title">فهرسة الكتب (MARC21)</h3>
             <div class="grid-form" id="bookForm">
-                <div class="input-group"><label>تصنيف ديوي (082):</label><input type="text" id="b082" oninput="upB()"></div>
-                <div class="input-group"><label>تصنيف الكونجرس (050):</label><input type="text" id="b050" oninput="upB()"></div>
+                <div class="input-group"><label>ديوي (082):</label><input type="text" id="b082" oninput="upB()"></div>
+                <div class="input-group"><label>الكونجرس (050):</label><input type="text" id="b050" oninput="upB()"></div>
                 <div class="input-group"><label>المؤلف (100):</label><input type="text" id="b100" oninput="upB()"></div>
-                <div class="input-group"><label>العنوان (245$a):</label><input type="text" id="b245" oninput="upB()"></div>
-                <div class="input-group"><label>بيان المسؤولية (245$c):</label><input type="text" id="b245c" oninput="upB()"></div>
-                <div class="input-group" id="isbn-area"><label>ISBN (020) - متكرر:</label><div class="repeat-box"><input type="text" class="b020" oninput="upB()"></div><button class="btn-add" onclick="addInp('isbn-area', 'b020')">+ إضافة ISBN</button></div>
-                <div class="input-group" id="pub-area"><label>بيانات النشر (260) - متكرر:</label><div class="repeat-box"><input type="text" class="b260" oninput="upB()"></div><button class="btn-add" onclick="addInp('pub-area', 'b260')">+ إضافة ناشر</button></div>
+                <div class="input-group"><label>العنوان (245):</label><input type="text" id="b245" oninput="upB()"></div>
+                <div class="input-group" id="isbn-area"><label>ISBN (020):</label><div class="repeat-box"><input type="text" class="b020" oninput="upB()"></div><button class="btn-add" onclick="addInp('isbn-area','b020')">+ إضافة</button></div>
+                <div class="input-group" id="pub-area"><label>الناشر (260):</label><div class="repeat-box"><input type="text" class="b260" oninput="upB()"></div><button class="btn-add" onclick="addInp('pub-area','b260')">+ إضافة</button></div>
                 <div class="input-group"><label>الوصف المادي (300):</label><input type="text" id="b300" oninput="upB()"></div>
-                <div class="input-group" id="sub-area"><label>الموضوعات (6xx) - متكرر:</label><div class="repeat-box"><select class="b6type" onchange="upB()"><option value="650">650</option><option value="600">600</option><option value="610">610</option></select><input type="text" class="b6val" oninput="upB()"></div><button class="btn-add" onclick="addSub()">+ إضافة موضوع</button></div>
                 <div class="input-group"><label>ملاحظات (500):</label><input type="text" id="b500" oninput="upB()"></div>
                 <div class="input-group"><label>ملخص (520):</label><textarea id="b520" oninput="upB()"></textarea></div>
                 <div class="input-group"><label>تزويد (900):</label><input type="text" id="b900" oninput="upB()"></div>
             </div>
             <div class="action-btns">
-                <button class="btn-save-main" onclick="saveToSheet('كتاب')">💾 حفظ الكتاب في السجل</button>
-                <button class="btn-clear" onclick="clearForm('bookForm')">🧹 مسح الحقول</button>
+                <button class="btn-save" onclick="saveData('كتاب')">💾 حفظ الكتاب</button>
+                <button class="btn-clear" onclick="clearF('bookForm')">🧹 مسح</button>
             </div>
         </div>
         <div class="preview-area"><div id="bC" class="classic-card"></div><div id="bM" class="marc-view"></div></div>
     </div>
 
-    <div id="p3" class="page">
+    <div id="p2" class="page">
         <div class="card">
-            <h3 class="section-title">فهرسة المخطوطات (الهيكل الأكاديمي الشامل)</h3>
+            <h3 class="section-title">فهرسة المخطوطات (الحقول الكاملة)</h3>
             <div class="grid-form" id="manuForm">
                 <div class="input-group"><label>العنوان الرئيسي:</label><input type="text" id="m245" oninput="upM()"></div>
                 <div class="input-group"><label>المؤلف:</label><input type="text" id="mAut" oninput="upM()"></div>
-                <div class="input-group"><label>المصدر (المكتبة/الخزانة):</label><input type="text" id="mSrc" oninput="upM()"></div>
+                <div class="input-group"><label>المصدر (المكتبة):</label><input type="text" id="mSrc" oninput="upM()"></div>
                 <div class="input-group"><label>اسم الناسخ:</label><input type="text" id="mScr" oninput="upM()"></div>
                 <div class="input-group"><label>تاريخ النسخ:</label><input type="text" id="mDate" oninput="upM()"></div>
-                <div class="input-group"><label>رقم الحفظ (التصنيف):</label><input type="text" id="mCla" oninput="upM()"></div>
+                <div class="input-group"><label>رقم الحفظ:</label><input type="text" id="mCla" oninput="upM()"></div>
                 <div class="input-group" style="grid-column: span 2;"><label>أول المخطوط:</label><textarea id="mSta" oninput="upM()"></textarea></div>
                 <div class="input-group" style="grid-column: span 2;"><label>آخر المخطوط:</label><textarea id="mEnd" oninput="upM()"></textarea></div>
                 <div class="input-group"><label>الموضوع:</label><input type="text" id="mSub" oninput="upM()"></div>
-                <div class="input-group"><label>الملاحظات الوصفية:</label><input type="text" id="mNot" oninput="upM()"></div>
+                <div class="input-group"><label>الملاحظات:</label><input type="text" id="mNot" oninput="upM()"></div>
             </div>
             <div class="action-btns">
-                <button class="btn-save-main" onclick="saveToSheet('مخطوط')">💾 حفظ المخطوط في السجل</button>
-                <button class="btn-clear" onclick="clearForm('manuForm')">🧹 مسح الحقول</button>
+                <button class="btn-save" onclick="saveData('مخطوط')">💾 حفظ المخطوط</button>
+                <button class="btn-clear" onclick="clearF('manuForm')">🧹 مسح</button>
             </div>
         </div>
         <div class="preview-area"><div id="mC" class="classic-card"></div><div id="mM" class="marc-view"></div></div>
     </div>
 
-    <div id="p4" class="page">
+    <div id="p3" class="page">
         <div class="card">
-            <button onclick="exportExcel()" style="float:left; padding:8px; background:#2c3e50; color:white; border:none; border-radius:5px; cursor:pointer;">📥 تصدير للسجل (Excel)</button>
-            <h3 class="section-title">📊 السجل العام للبيانات</h3>
-            <div style="overflow-x:auto;"><table class="data-table"><thead><tr><th>النوع</th><th>العنوان</th><th>المؤلف/الناسخ</th><th>الناشر/المصدر</th><th>التاريخ</th><th>الموضوع</th></tr></thead><tbody id="sheetBody"></tbody></table></div>
+            <button onclick="exportX()" style="float:left; padding:8px; background:#2c3e50; color:white; border:none; border-radius:5px; cursor:pointer;">📥 تصدير Excel</button>
+            <h3 class="section-title">📊 السجل العام</h3>
+            <div style="overflow-x:auto;"><table class="data-table"><thead><tr><th>النوع</th><th>العنوان</th><th>المؤلف/الناسخ</th><th>المصدر/الناشر</th><th>التاريخ</th><th>الملاحظات</th></tr></thead><tbody id="sBody"></tbody></table></div>
         </div>
     </div>
-
 </div>
 
 <script>
-    let sheetData = [];
+    let db = [];
     function tab(id, btn) {
         document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
         document.getElementById(id).classList.add('active');
         document.querySelectorAll('.nav-tabs button').forEach(b => b.classList.remove('active'));
         btn.classList.add('active');
     }
-    function addInp(areaId, cls) {
+    function addInp(id, cls) {
         const div = document.createElement('div'); div.className = 'repeat-box';
         div.innerHTML = `<input type="text" class="${cls}" oninput="upB()">`;
-        const area = document.getElementById(areaId); area.insertBefore(div, area.querySelector('.btn-add'));
-    }
-    function addSub() {
-        const div = document.createElement('div'); div.className = 'repeat-box';
-        div.innerHTML = `<select class="b6type" onchange="upB()"><option value="650">650</option><option value="600">600</option><option value="610">610</option></select><input type="text" class="b6val" oninput="upB()">`;
-        const area = document.getElementById('sub-area'); area.insertBefore(div, area.querySelector('.btn-add'));
+        const area = document.getElementById(id); area.insertBefore(div, area.querySelector('button'));
     }
     function upB() {
         const v = id => document.getElementById(id)?.value || "";
-        const all = cls => Array.from(document.getElementsByClassName(cls)).map(i => i.value).filter(x => x);
-        document.getElementById('bC').innerHTML = `<b>${v('b100')}</b><br>${v('b245')}. -- ${all('b260').join(' ; ')}. -- ${v('b300')}.`;
-        document.getElementById('bM').innerHTML = `100 1# $a ${v('b100')}\n245 10 $a ${v('b245')} $c ${v('b245c')}\n${all('b260').map(p=>`260 ## $a ${p}`).join('\n')}`;
+        const all = cls => Array.from(document.getElementsByClassName(cls)).map(i => i.value).filter(x => x).join(' ; ');
+        document.getElementById('bC').innerHTML = `<b>${v('b100')}</b><br>${v('b245')}. -- ${all('b260')}. -- ${v('b300')}.<br>${v('b500')}`;
+        document.getElementById('bM').innerHTML = `100 1# $a ${v('b100')}\n245 10 $a ${v('b245')}\n260 ## $a ${all('b260')}\n300 ## $a ${v('b300')}`;
     }
     function upM() {
         const v = id => document.getElementById(id).value || "";
-        document.getElementById('mC').innerHTML = `<center><b>بِطاقة مَخطوط</b></center><br><b>العنوان:</b> ${v('m245')}<br><b>المؤلف:</b> ${v('mAut')}<br><b>المصدر:</b> ${v('mSrc')}<br><b>الناسخ:</b> ${v('mScr')}<br><b>تاريخ النسخ:</b> ${v('mDate')}<br><hr><b>أوله:</b> ${v('mSta')}`;
-        document.getElementById('mM').innerHTML = `100 $a ${v('mAut')}\n245 $a ${v('m245')}\n500 $a المصدر: ${v('mSrc')}\n500 $a الناسخ: ${v('mScr')}\n500 $a تاريخ النسخ: ${v('mDate')}`;
+        document.getElementById('mC').innerHTML = `<center><b>بِطاقة مَخطوط</b></center><br><b>العنوان:</b> ${v('m245')}<br><b>المؤلف:</b> ${v('mAut')}<br><b>المصدر:</b> ${v('mSrc')}<br><b>الناسخ:</b> ${v('mScr')}<br><b>التاريخ:</b> ${v('mDate')}<br><hr><b>أوله:</b> ${v('mSta')}`;
+        document.getElementById('mM').innerHTML = `245 $a ${v('m245')}\n500 $a المصدر: ${v('mSrc')}\n500 $a الناسخ: ${v('mScr')}\n500 $a التاريخ: ${v('mDate')}`;
     }
-    function saveToSheet(type) {
+    function saveData(t) {
         const v = id => document.getElementById(id)?.value || "";
-        const all = cls => Array.from(document.getElementsByClassName(cls)).map(i => i.value).filter(x=>x).join(' | ');
-        let rec = (type==='كتاب') ? 
-            { t: 'كتاب', tit: v('b245'), aut: v('b100'), src: all('b260'), date: '-', sub: all('b6val') } : 
-            { t: 'مخطوط', tit: v('m245'), aut: v('mScr'), src: v('mSrc'), date: v('mDate'), sub: v('mSub') };
-        sheetData.push(rec);
-        document.getElementById('sheetBody').innerHTML = sheetData.map(r => `<tr><td>${r.t}</td><td>${r.tit}</td><td>${r.aut}</td><td>${r.src}</td><td>${r.date}</td><td>${r.sub}</td></tr>`).join('');
-        alert("تم حفظ البيانات بنجاح!");
+        const all = cls => Array.from(document.getElementsByClassName(cls)).map(i => i.value).filter(x => x).join(' | ');
+        let r = (t==='كتاب') ? { t: 'كتاب', tit: v('b245'), aut: v('b100'), src: all('b260'), date: '-', not: v('b500') }
+                             : { t: 'مخطوط', tit: v('m245'), aut: v('mScr'), src: v('mSrc'), date: v('mDate'), not: v('mNot') };
+        db.push(r);
+        document.getElementById('sBody').innerHTML = db.map(i => `<tr><td>${i.t}</td><td>${i.tit}</td><td>${i.aut}</td><td>${i.src}</td><td>${i.date}</td><td>${i.not}</td></tr>`).join('');
+        alert("تم الحفظ بنجاح!");
     }
-    function clearForm(id) {
-        if(confirm("هل تريد مسح كافة الحقول؟")) {
-            const f = document.getElementById(id); f.querySelectorAll('input, textarea').forEach(i => i.value = "");
-            f.querySelectorAll('.repeat-box').forEach((box, idx) => { if(idx > 0) box.remove(); });
-            upB(); upM();
-        }
+    function clearF(id) {
+        document.getElementById(id).querySelectorAll('input, textarea').forEach(i => i.value = "");
+        upB(); upM();
     }
-    function exportExcel() {
-        const ws = XLSX.utils.json_to_sheet(sheetData);
+    function exportX() {
+        const ws = XLSX.utils.json_to_sheet(db);
         const wb = XLSX.utils.book_new();
         XLSX.utils.book_append_sheet(wb, ws, "Data");
-        XLSX.writeFile(wb, "Sadi_Full_Database.xlsx");
+        XLSX.writeFile(wb, "Sadi_Platform.xlsx");
     }
 </script>
 </body>
