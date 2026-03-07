@@ -2,10 +2,10 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <title>منصة السعدي - الربط الذكي مع مكتبة جوجل</title>
+    <title>منصة السعدي الاحترافية - الإصدار الهيكلي المعتمد</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     <style>
-        :root { --primary: #1a2a6c; --secondary: #b21f1f; --save: #27ae60; --ai: #4285F4; --bg: #f4f7f6; }
+        :root { --primary: #1a2a6c; --secondary: #b21f1f; --save: #27ae60; --clear: #e67e22; --bg: #f4f7f6; }
         body { font-family: 'Segoe UI', Tahoma, sans-serif; background: var(--bg); margin: 0; padding-bottom: 50px; }
         header { background: linear-gradient(135deg, var(--primary), #2a4858); color: white; padding: 15px; text-align: center; }
         .nav-tabs { display: flex; background: #fff; border-bottom: 3px solid var(--secondary); position: sticky; top: 0; z-index: 1000; }
@@ -20,144 +20,38 @@
         .repeat-box { border: 1px dashed var(--primary); padding: 8px; margin-top: 5px; border-radius: 5px; display: flex; gap: 5px; }
         label { font-weight: bold; font-size: 0.85rem; color: var(--primary); margin-bottom: 5px; }
         input, select, textarea { padding: 8px; border: 1px solid #ccc; border-radius: 6px; width: 100%; box-sizing: border-box; }
-        .btn-add { background: var(--primary); color: white; border: none; padding: 4px 8px; cursor: pointer; border-radius: 4px; font-size: 0.75rem; margin-top: 5px; }
+        .btn-add { background: var(--primary); color: white; border: none; padding: 4px 8px; cursor: pointer; border-radius: 4px; font-size: 0.75rem; margin-top: 5px; width: fit-content; }
         .action-btns { display: flex; gap: 10px; margin: 20px 0; }
-        .btn-save-main { flex: 3; background: var(--save); color: white; padding: 15px; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; }
-        .btn-google { background: var(--ai); color: white; padding: 10px; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; margin-top: 10px; }
+        .btn-save-main { flex: 3; background: var(--save); color: white; padding: 15px; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 1.1rem; }
+        .btn-clear { flex: 1; background: var(--clear); color: white; padding: 15px; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 1.1rem; }
         .preview-area { display: grid; grid-template-columns: repeat(auto-fit, minmax(450px, 1fr)); gap: 20px; }
-        .classic-card { background: white; border: 1px solid #333; padding: 30px; font-family: 'Times New Roman', serif; min-height: 350px; }
-        .marc-view { background: #282c34; color: #9cdcfe; padding: 15px; border-radius: 10px; direction: ltr; text-align: left; font-family: monospace; white-space: pre-wrap; }
+        .classic-card { background: white; border: 1px solid #333; padding: 30px; font-family: 'Times New Roman', serif; min-height: 400px; line-height: 1.6; }
+        .marc-view { background: #282c34; color: #9cdcfe; padding: 15px; border-radius: 10px; direction: ltr; text-align: left; font-family: monospace; white-space: pre-wrap; font-size: 0.9rem; }
+        .data-table { width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 0.85rem; background: white; }
+        .data-table th { background: var(--primary); color: white; padding: 10px; border: 1px solid #ddd; }
+        .data-table td { padding: 8px; border: 1px solid #ddd; text-align: center; }
     </style>
 </head>
 <body>
 
 <header>
-    <h1>منصة السعدي - الربط المباشر بمكتبة Google Books</h1>
-    <p>بإشراف الخبير الأستاذ عماد كاظم السعدي</p>
+    <h1>منصة السعدي الاحترافية - إصدار الفهرسة الموحد</h1>
+    <p>بإشراف الخبير الأستاذ عماد كاظم السعدي © 2026</p>
 </header>
 
 <nav class="nav-tabs">
     <button class="active" onclick="tab('p2', this)">📚 فهرسة الكتب</button>
     <button onclick="tab('p3', this)">📜 فهرسة المخطوطات</button>
-    <button onclick="tab('p5', this)">🔍 جلب بيانات جوجل</button>
-    <button onclick="tab('p4', this)">📊 السجل</button>
+    <button onclick="tab('p4', this)">📊 السجل المدرج (Sheet)</button>
 </nav>
 
 <div class="container">
 
     <div id="p2" class="page active">
         <div class="card">
-            <h3 class="section-title">فهرسة الكتب - الحقول المتكررة (مارك)</h3>
+            <h3 class="section-title">فهرسة الكتب - الحقول المتكررة (MARC21)</h3>
             <div class="grid-form" id="bookForm">
                 <div class="input-group"><label>ديوي (082):</label><input type="text" id="b082" oninput="upB()"></div>
-                <div class="input-group"><label>المؤلف (100):</label><input type="text" id="b100" oninput="upB()"></div>
-                <div class="input-group"><label>العنوان (245):</label><input type="text" id="b245" oninput="upB()"></div>
-                <div class="input-group" id="isbn-area">
-                    <label>ISBN (020):</label>
-                    <div class="repeat-box"><input type="text" class="b020" oninput="upB()"></div>
-                    <button class="btn-add" onclick="addInp('isbn-area', 'b020')">+ إضافة</button>
-                </div>
-                <div class="input-group" id="pub-area">
-                    <label>الناشر (260):</label>
-                    <div class="repeat-box"><input type="text" class="b260" oninput="upB()"></div>
-                    <button class="btn-add" onclick="addInp('pub-area', 'b260')">+ إضافة</button>
-                </div>
-                <div class="input-group"><label>الوصف المادي (300):</label><input type="text" id="b300" oninput="upB()"></div>
-                <div class="input-group" id="sub-area">
-                    <label>الموضوعات (6xx):</label>
-                    <div class="repeat-box"><input type="text" class="b6val" oninput="upB()"></div>
-                    <button class="btn-add" onclick="addSub()">+ إضافة</button>
-                </div>
-                <div class="input-group"><label>ملخص (520):</label><textarea id="b520" oninput="upB()"></textarea></div>
-                <div class="input-group"><label>ملاحظات (500):</label><input type="text" id="b500" oninput="upB()"></div>
-            </div>
-            <div class="action-btns">
-                <button class="btn-save-main" onclick="saveToSheet()">💾 حفظ السجل</button>
-                <button style="background:var(--clear); color:white; border:none; border-radius:8px; padding:15px; cursor:pointer;" onclick="clearForm('bookForm')">🧹 مسح</button>
-            </div>
-        </div>
-        <div class="preview-area"><div id="bC" class="classic-card"></div><div id="bM" class="marc-view"></div></div>
-    </div>
-
-    <div id="p5" class="page">
-        <div class="card" style="border-top-color: var(--ai);">
-            <h3 class="section-title" style="color:var(--ai)">🌐 جلب البيانات آلياً من مكتبة جوجل</h3>
-            <p style="font-size: 0.9rem; color: #666;">أدخل رقم ISBN أو اسم الكتاب وسأقوم بتعبئة حقول الفهرسة لك تلقائياً.</p>
-            <div class="grid-form">
-                <div class="input-group">
-                    <label>ابحث بـ ISBN أو العنوان:</label>
-                    <input type="text" id="googleQuery" placeholder="مثال: 9789774552434 أو عبقرية عمر">
-                    <button class="btn-google" onclick="fetchFromGoogle()">🔍 جلب البيانات الآن</button>
-                </div>
-            </div>
-            <div id="googleStatus" style="margin-top:10px; font-weight:bold; color:var(--primary);"></div>
-        </div>
-    </div>
-
-    <div id="p3" class="page"> </div>
-    <div id="p4" class="page"> </div>
-
-</div>
-
-<script>
-    // وظيفة الجلب من جوجل
-    async function fetchFromGoogle() {
-        const query = document.getElementById('googleQuery').value;
-        const status = document.getElementById('googleStatus');
-        if (!query) return alert("يرجى إدخال نص للبحث");
-
-        status.innerText = "⏳ جاري الاتصال بمكتبة جوجل...";
-        
-        try {
-            const response = await fetch(`https://www.googleapis.com/books/v1/volumes?q=${encodeURIComponent(query)}`);
-            const data = await response.json();
-
-            if (data.items && data.items.length > 0) {
-                const info = data.items[0].volumeInfo;
-                
-                // تعبئة الحقول الأصلية دون المساس بالبنية
-                document.getElementById('b245').value = info.title || "";
-                document.getElementById('b100').value = (info.authors) ? info.authors.join('، ') : "";
-                document.getElementById('b520').value = info.description || "";
-                
-                // تعبئة الناشر في أول حقل متكرر
-                if(info.publisher) document.getElementsByClassName('b260')[0].value = `${info.publisher}، ${info.publishedDate || ''}`;
-                
-                // تعبئة ISBN في أول حقل متكرر
-                if(info.industryIdentifiers) document.getElementsByClassName('b020')[0].value = info.industryIdentifiers[0].identifier;
-
-                status.innerText = "✅ تم جلب البيانات بنجاح! انتقل لتبويب الفهرسة للمعاينة.";
-                upB(); // تحديث بطاقة المعاينة
-            } else {
-                status.innerText = "❌ لم يتم العثور على نتائج في مكتبة جوجل.";
-            }
-        } catch (error) {
-            status.innerText = "⚠️ خطأ في الاتصال بالإنترنت.";
-        }
-    }
-
-    // الوظائف الأصلية للمنصة
-    function tab(id, btn) {
-        document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-        document.getElementById(id).classList.add('active');
-        document.querySelectorAll('.nav-tabs button').forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-    }
-
-    function addInp(areaId, cls) {
-        const div = document.createElement('div'); div.className = 'repeat-box';
-        div.innerHTML = `<input type="text" class="${cls}" oninput="upB()">`;
-        const area = document.getElementById(areaId); area.insertBefore(div, area.querySelector('.btn-add'));
-    }
-
-    function upB() {
-        const v = id => document.getElementById(id)?.value || "";
-        const all = cls => Array.from(document.getElementsByClassName(cls)).map(i => i.value).filter(x => x);
-        document.getElementById('bC').innerHTML = `<b>${v('b100')}</b><br>${v('b245')}. -- ${all('b260')[0] || ''}.<br>${v('b520').substring(0, 200)}...`;
-        document.getElementById('bM').innerHTML = `100 1# $a ${v('b100')}\n245 10 $a ${v('b245')}\n520 ## $a ${v('b520')}`;
-    }
-
-    // (باقي وظائف الحفظ والمسح والمخطوطات تتبع نفس نمط الأكواد السابقة)
-</script>
-</body>
-</html>
+                <div class="input-group"><label>الكونجرس (050):</label><input type="text" id="b050" oninput="upB()"></div>
+                <div class="input-group"><label>المدخل الرئيسي (100):</label><input type="text" id="b100" oninput="upB()"></div>
+                <div class="input-group"><label>العنوان (245$a$b):</label><input type="text"
