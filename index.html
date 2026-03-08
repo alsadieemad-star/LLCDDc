@@ -2,7 +2,7 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <title>منصة السعدي الأكاديمية - الإصدار الشامل المعتمد</title>
+    <title>منصة السعدي الأكاديمية - الإصدار النهائي المعتمد</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     <style>
         :root { --primary: #1a2a6c; --secondary: #b21f1f; --save: #27ae60; --bg: #f4f7f6; }
@@ -31,13 +31,12 @@
 <body>
 
 <header>
-    <h1>منصة السعدي للفهرسة - الإصدار الكامل وغير المختصر</h1>
-    <p>بإشراف الخبير الأستاذ عماد السعدي</p>
+    <h1>منصة السعدي للفهرسة - مجهود الأستاذ عماد السعدي</h1>
 </header>
 
 <nav class="nav-tabs">
     <button class="active" onclick="tab('p1', this)">📚 الكتب (المداخل والمارك)</button>
-    <button onclick="tab('p2', this)">📜 المخطوطات</button>
+    <button onclick="tab('p2', this)">📜 المخطوطات (مارك 21)</button>
     <button onclick="tab('p3', this)">📊 استيراد وإدارة الملفات</button>
 </nav>
 
@@ -54,36 +53,31 @@
                 <div class="input-group"><label>مدخل مؤتمر (111):</label><input type="text" id="b111" oninput="upB()"></div>
                 <div class="input-group"><label>عنوان موحد (130):</label><input type="text" id="b130" oninput="upB()"></div>
                 <div class="input-group" style="grid-column: span 2;"><label>العنوان والبيانات (245):</label><input type="text" id="b245" oninput="upB()"></div>
-
-                <div class="input-group" id="area-600"><label>600 (شخص) - مكرر:</label><div class="repeat-box"><input type="text" class="tag600" oninput="upB()"></div><button class="btn-add" onclick="add('area-600','tag600')">+ إضافة</button></div>
-                <div class="input-group" id="area-610"><label>610 (هيئة) - مكرر:</label><div class="repeat-box"><input type="text" class="tag610" oninput="upB()"></div><button class="btn-add" onclick="add('area-610','tag610')">+ إضافة</button></div>
-                <div class="input-group" id="area-650"><label>650 (موضوع عام) - مكرر:</label><div class="repeat-box"><input type="text" class="tag650" oninput="upB()"></div><button class="btn-add" onclick="add('area-650','tag650')">+ إضافة موضوع</button></div>
-
+                <div class="input-group" id="area-650"><label>650 (موضوع عام):</label><div class="repeat-box"><input type="text" class="tag650" oninput="upB()"></div><button class="btn-add" onclick="add('area-650','tag650')">+ إضافة موضوع</button></div>
                 <div class="input-group" id="area-700"><label>700 (مؤلف إضافي):</label><div class="repeat-box"><input type="text" class="tag700" oninput="upB()"></div><button class="btn-add" onclick="add('area-700','tag700')">+ إضافة</button></div>
-                <div class="input-group" id="area-740"><label>740 (عنوان إضافي):</label><div class="repeat-box"><input type="text" class="tag740" oninput="upB()"></div><button class="btn-add" onclick="add('area-740','tag740')">+ إضافة</button></div>
-
                 <div class="input-group"><label>بيانات النشر (260):</label><input type="text" id="b260" oninput="upB()"></div>
                 <div class="input-group"><label>الوصف المادي (300):</label><input type="text" id="b300" oninput="upB()"></div>
                 <div class="input-group"><label>ملاحظة ببليوجرافية (504):</label><textarea id="b504" oninput="upB()"></textarea></div>
                 <div class="input-group"><label>مصدر التزويد (900):</label><textarea id="b900" oninput="upB()"></textarea></div>
                 <div class="input-group" style="grid-column: span 2;"><label>الرابط الإلكتروني (856):</label><input type="text" id="b856" oninput="upB()"></div>
             </div>
-            <button class="btn-save" onclick="saveData('كتاب')">💾 حفظ الكتاب في السجل</button>
+            <button class="btn-save" onclick="saveData('كتاب')">💾 حفظ الكتاب</button>
         </div>
         <div class="preview-area"><div id="bC" class="classic-card"></div><div id="bM" class="marc-view"></div></div>
     </div>
 
     <div id="p2" class="page">
         <div class="card">
-            <h3 class="section-title">فهرسة المخطوطات (الحقول الكاملة)</h3>
+            <h3 class="section-title">فهرسة المخطوطات - التوافق الكامل مع مارك 21</h3>
             <div class="grid-form">
-                <div class="input-group"><label>عنوان المخطوط:</label><input type="text" id="m245" oninput="upM()"></div>
-                <div class="input-group"><label>المؤلف:</label><input type="text" id="mAut" oninput="upM()"></div>
-                <div class="input-group"><label>المصدر (المكتبة):</label><input type="text" id="mSrc" oninput="upM()"></div>
-                <div class="input-group"><label>اسم الناسخ:</label><input type="text" id="mScr" oninput="upM()"></div>
-                <div class="input-group"><label>تاريخ النسخ:</label><input type="text" id="mDate" oninput="upM()"></div>
-                <div class="input-group"><label>رقم الحفظ:</label><input type="text" id="mCla" oninput="upM()"></div>
-                <div class="input-group" style="grid-column: span 2;"><label>أول المخطوط وآخره:</label><textarea id="mSta" oninput="upM()"></textarea></div>
+                <div class="input-group"><label>رقم التصنيف والحفظ (090):</label><input type="text" id="m090" placeholder="مثلاً: 211/ ف.ج" oninput="upM()"></div>
+                <div class="input-group"><label>عنوان المخطوط (245):</label><input type="text" id="m245" oninput="upM()"></div>
+                <div class="input-group"><label>المؤلف (100):</label><input type="text" id="mAut" oninput="upM()"></div>
+                <div class="input-group"><label>المصدر / المكتبة (500):</label><input type="text" id="mSrc" placeholder="اسم الخزانة أو المكتبة" oninput="upM()"></div>
+                <div class="input-group"><label>اسم الناسخ (500 $a):</label><input type="text" id="mScr" oninput="upM()"></div>
+                <div class="input-group"><label>تاريخ النسخ (260 $c):</label><input type="text" id="mDate" placeholder="مثلاً: 1240 هـ" oninput="upM()"></div>
+                <div class="input-group" id="area-m650"><label>الموضوع (650) - مكرر:</label><div class="repeat-box"><input type="text" class="mtag650" oninput="upM()"></div><button class="btn-add" onclick="add('area-m650','mtag650')">+ إضافة موضوع</button></div>
+                <div class="input-group" style="grid-column: span 2;"><label>بداية المخطوط وآخره (500):</label><textarea id="mSta" placeholder="أوله... وآخره..." oninput="upM()"></textarea></div>
             </div>
             <button class="btn-save" onclick="saveData('مخطوط')">💾 حفظ المخطوط</button>
         </div>
@@ -98,7 +92,7 @@
                 <div class="upload-card"><b>ملف المؤلفين</b><br><input type="file" accept=".xlsx, .xls"></div>
                 <div class="upload-card"><b>ملف الموضوعات</b><br><input type="file" accept=".xlsx, .xls"></div>
             </div>
-            <button onclick="exportX()" style="margin-top:20px; padding:15px; background:var(--primary); color:white; border:none; border-radius:10px; cursor:pointer; width:100%;">📥 تصدير السجل العام الحالي</button>
+            <button onclick="exportX()" style="margin-top:20px; padding:15px; background:var(--primary); color:white; border:none; border-radius:10px; cursor:pointer; width:100%;">📥 تصدير السجل العام</button>
             <div style="overflow-x:auto; margin-top:20px;">
                 <table style="width:100%; border-collapse: collapse; background: white;" border="1">
                     <thead style="background:var(--primary); color:white;"><tr><th>النوع</th><th>العنوان</th><th>المؤلف/الناسخ</th><th>الموضوع/المصدر</th></tr></thead>
@@ -119,7 +113,7 @@
     }
     function add(areaId, cls) {
         const div = document.createElement('div'); div.className = 'repeat-box';
-        div.innerHTML = `<input type="text" class="${cls}" oninput="upB()">`;
+        div.innerHTML = `<input type="text" class="${cls}" oninput="${cls.startsWith('m')?'upM()':'upB()'}">`;
         const container = document.getElementById(areaId);
         container.insertBefore(div, container.querySelector('button'));
     }
@@ -129,34 +123,43 @@
         const v = id => document.getElementById(id)?.value || "";
         let m = "";
         getAll('tag020').forEach(x => m += `020 ## $a ${x}\n`);
-        if(v('b082')) m += `082 ## $a ${v('b082')}\n`;
         if(v('b100')) m += `100 1# $a ${v('b100')}\n`;
         if(v('b245')) m += `245 10 $a ${v('b245')}\n`;
         getAll('tag650').forEach(x => m += `650 #4 $a ${x}\n`);
-        getAll('tag700').forEach(x => m += `700 1# $a ${x}\n`);
         document.getElementById('bM').textContent = m;
-        document.getElementById('bC').innerHTML = `<b>${v('b245')}</b><br>${v('b100')}<br>${getAll('tag020').join(' - ')}`;
+        document.getElementById('bC').innerHTML = `<b>${v('b245')}</b><br>${v('b100')}`;
     }
 
     function upM() {
-        const v = id => document.getElementById(id).value || "";
-        document.getElementById('mC').innerHTML = `<b>${v('m245')}</b><br>الناسخ: ${v('mScr')}<br>المصدر: ${v('mSrc')}`;
-        document.getElementById('mM').textContent = `245 $a ${v('m245')}\n500 $a الناسخ: ${v('mScr')}\n500 $a التاريخ: ${v('mDate')}`;
+        const v = id => document.getElementById(id)?.value || "";
+        const topics = getAll('mtag650');
+        let marc = "";
+        if(v('m090')) marc += `090 ## $a ${v('m090')}\n`;
+        if(v('mAut')) marc += `100 1# $a ${v('mAut')}\n`;
+        if(v('m245')) marc += `245 10 $a ${v('m245')}\n`;
+        if(v('mDate')) marc += `260 ## $c ${v('mDate')}\n`;
+        topics.forEach(t => marc += `650 #4 $a ${t}\n`);
+        if(v('mSrc')) marc += `500 ## $a المصدر: ${v('mSrc')}\n`;
+        if(v('mScr')) marc += `500 ## $a الناسخ: ${v('mScr')}\n`;
+        if(v('mSta')) marc += `500 ## $a الوصف: ${v('mSta')}`;
+
+        document.getElementById('mM').textContent = marc;
+        document.getElementById('mC').innerHTML = `<center><b>بِطاقة مَخطوط</b></center><br><b>العنوان:</b> ${v('m245')}<br><b>التصنيف:</b> ${v('m090')}<br><b>الموضوع:</b> ${topics.join(' - ')}<hr><b>الناسخ:</b> ${v('mScr')}<br><b>التاريخ:</b> ${v('mDate')}`;
     }
 
     function saveData(t) {
         const v = id => document.getElementById(id)?.value || "";
-        let r = { t, tit: (t==='كتاب'?v('b245'):v('m245')), aut: (t==='كتاب'?v('b100'):v('mScr')), sub: (t==='كتاب'?v('b856'):v('mSrc')) };
+        let r = { t, tit: (t==='كتاب'?v('b245'):v('m245')), aut: (t==='كتاب'?v('b100'):v('mScr')), sub: (t==='كتاب'?v('b082'):v('m090')) };
         db.push(r);
         document.getElementById('sBody').innerHTML = db.map(i => `<tr><td>${i.t}</td><td>${i.tit}</td><td>${i.aut}</td><td>${i.sub}</td></tr>`).join('');
-        alert("تم الحفظ!");
+        alert("تم الحفظ بنجاح!");
     }
 
     function exportX() {
         const ws = XLSX.utils.json_to_sheet(db);
         const wb = XLSX.utils.book_new();
         XLSX.utils.book_append_sheet(wb, ws, "Archive");
-        XLSX.writeFile(wb, "Sadi_Full_Data.xlsx");
+        XLSX.writeFile(wb, "Sadi_Database.xlsx");
     }
 </script>
 </body>
